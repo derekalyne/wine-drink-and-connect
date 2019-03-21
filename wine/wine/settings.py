@@ -43,6 +43,7 @@ STATICFILES_DIRS = [
 # Application definition
 
 INSTALLED_APPS = [
+    'api.apps.ApiConfig',
     'template.apps.TemplateConfig',
     'welcome.apps.WelcomeConfig',
     'django.contrib.admin',

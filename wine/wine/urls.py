@@ -7,5 +7,6 @@ urlpatterns = [
     path('template/', include('template.urls')),
     path('welcome/', include('welcome.urls')),
     path('admin/', admin.site.urls),
+    path('api/',include('api.urls')),
     url(r'^api/members/$', views.member_list),
 ]
