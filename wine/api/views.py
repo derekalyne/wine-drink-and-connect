@@ -35,7 +35,7 @@ def user_list(request, format=None):
         if data.has_previous():
             previousPage = data.previous_page_number()
 
-        return Response({'data': serializer.data , 'count': paginator.count, 'numpages' : paginator.num_pages, 'nextlink': '/api/drinkers/?page=' + str(nextPage), 'prevlink': '/api/drinkers/?page=' + str(previousPage)})
+        return Response({'data': serializer.data , 'count': paginator.count, 'numpages' : paginator.num_pages})
 
     elif request.method == 'POST':
         serializer = DrinkersSerializer(data=request.data)
@@ -142,7 +142,7 @@ def wine_list(request,format=None):
         
     
     page = request.GET.get('page', 1)
-    paginator = Paginator(members, 10)
+    paginator = Paginator(members, 20)
     try:
         data = paginator.page(page)
     except PageNotAnInteger:
@@ -162,6 +162,6 @@ def wine_list(request,format=None):
             dictionary.update({'image2': request.META['HTTP_HOST']+'/static'+'/wid'+str(dictionary['wid'])+'/'+'1.jpg'})
     
 
-    return Response({'data': serializer.data , 'count': paginator.count, 'numpages' : paginator.num_pages, 'nextlink': '/api/wines/?page=' + str(nextPage), 'prevlink': '/api/wines/?page=' + str(previousPage)})
+    return Response({'data': serializer.data , 'count': paginator.count, 'numpages' : paginator.num_pages})
 
     pass
