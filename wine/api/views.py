@@ -100,7 +100,22 @@ def review_list(request,wid,format=None):
     API endpoint that return list of reviews and wine info for a given wine
     /api/reviews/{wid}
     """
-    pass
+    data = []
+    members = Reviews.objects.all()
+    members = members.filter(wid = wid)
+    page = request.GET.get('page', 1)
+    paginator = Paginator(members, 10)
+    try:
+        data = paginator.page(page)
+    except PageNotAnInteger:
+        data = paginator.page(1)
+    except EmptyPage:
+        data = paginator.page(paginator.num_pages)
+
+    serializer = ReviewsSerializer(data,context={'request': request} ,many=True)
+    
+    return Response({'data': serializer.data , 'count': paginator.count, 'numpages' : paginator.num_pages})
+    
 
 @api_view(['GET'])
 def wine_list(request,format=None):

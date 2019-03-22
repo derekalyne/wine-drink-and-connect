@@ -20,7 +20,7 @@ class LocationsSerializer(serializers.ModelSerializer):
 class ReviewsSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Drinkers 
+        model = Reviews 
         fields = ("rid","description","rating","wid","username")
 
 
