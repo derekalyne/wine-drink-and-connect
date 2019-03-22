@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html>
+<!--<![endif]-->
+<head>
+    <meta charset="utf-8"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>docplayer.es</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    
+    
+    <meta property="og:title" content="docplayer.es">
+    <meta property="og:type" content="website">
+
+    
+    
+    <link rel="shortcut icon" href="//docplayer.es/favicon.ico">
+
+    <!-- Fonts START -->
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|PT+Sans+Narrow|Source+Sans+Pro:200,300,400,600,700,900&subset=all" rel="stylesheet" type="text/css">
+    <!-- Fonts END -->
+
+            <link rel="stylesheet" type="text/css" href="/static/css/d376f/total.css">
+        
+    
+        
+</head>
+
+<!-- Body BEGIN -->
+<body class="corporate">
+<!-- BEGIN HEADER -->
+<div class="header">
+    <div class="container-fluid pre-header">
+        <div class="row">
+            <div class="col-md-2 hidden-sm hidden-xs additional-shop-info">
+                <a style="max-width: 80px;" class="site-logo" href="/"><img src="/static/images/docplayer_logo.png"></a>
+            </div>
+            <div class="col-md-2 col-sm-3 col-xs-12 top_menu_user pull-right">
+                <ul class="list-unstyled list-inline pull-right" style="float: none!important;">
+                    <li class="nologin hidden"><i class="fa fa-sign-in"></i> <a href="/login/">Iniciar la sesión</a></li>
+                    <li class="nologin hidden"><a href="/register/">Registro</a></li>
+                </ul>
+            </div>
+            <div class="col-md-8 col-sm-9 col-xs-12 pull-left">
+                <form action="/search/" class="content-search-view2">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Búsqueda..." name="q" value="">
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn btn-primary">Buscar</button>
+                        </span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Header END -->
+
+
+
+<style type="text/css">
+    h2 {
+        color: #E5E5E5;
+        font-size: 210px;
+        font-weight: bold;
+        height: auto;
+        line-height: normal;
+    }
+    h1 {
+        font-weight: bold;
+        height: auto;
+        line-height: normal;
+        font-size: 21px;
+    }
+
+    .header {margin-bottom: 50px;}
+
+</style>
+<div class="container" style="width: 340px; font-size: 17px; margin-bottom: 10px; text-align: center;">
+    <h1>Error HTTP 502 (Bad Gateway)</h1>
+    <div style="text-align: justify; margin-top: 10px;">The gateway or proxy server received an invalid response from an upstream server.</div>
+    <h2>502</h2>
+</div>
+<script>
+    setTimeout(function(){
+        var im = new Image();
+        im.src = "/support/error/?code=502&url="+encodeURIComponent(document.location.toString());
+    }, 100);
+</script>
+
+<!-- BEGIN FOOTER -->
+<div class="footer">
+    <div class="container">
+        <div class="row">
+            <!-- BEGIN COPYRIGHT -->
+            <div class="col-md-10 col-sm-10 padding-top-10">
+                2019 © DocPlayer.es <a href="/support/privacy-policy/">Política de privacidad</a> | <a href="/support/terms-of-service/">Condiciones del servicio</a> | <a href="/support/feedback/">Feedback</a>
+            </div>
+            <!-- END COPYRIGHT -->
+
+            <!-- BEGIN PAYMENTS -->
+            <div class="col-md-6 col-sm-6">
+                            </div>
+            <!-- END PAYMENTS -->
+            <div id="footer_height_for_cookie_msg" style="height:10em; visibility: hidden;"><!--height for cookie banner on bottom of page --></div>
+        </div>
+    </div>
+</div>
+<!-- END FOOTER -->
+
+<!--[if lt IE 9]>
+    <script src="/static/theme/global/plugins/respond.min.js"></script>
+<![endif]-->
+
+
+    <script src="/static/js/d376f/total.js" type="text/javascript"></script>
+
+<div style="display: none;">
+    <script>
+        var page_data = {"domain_id":27,"design_id":0,"page_id":0};        (function(){
+            var img = new Image();
+            var pixel_image_src = '/pix/'+Math.random()+'/report/pixel.gif?type=pageview&domain_id=27&page_id=0&design_id=0&l='+encodeURIComponent(navigator.language)+'&p='+encodeURIComponent(navigator.platform)+'&url='+encodeURIComponent(document.location);
+            document.write('<img src="'+pixel_image_src+'"> ');
+        }());
+    </script>
+</div>
+
+<div id="cookie_msg" style="z-index:99999; background-color:  rgb(244, 244, 244); color:#647484; font-size: 13px; border-top: 1px #cccccc solid; width: 100%; position: fixed;bottom: 0;padding: 3px; padding-right: 30px ;text-align: center;left:0">
+    To make this website work, we log user data and share it with processors. To use this website, you must agree to our <a href="/support/privacy-policy/" target="_blank">Privacy Policy</a>, including cookie policy.
+        <button href="#" type="submit" onclick="accept_cookie_msg();return false;" class="btn btn-default btn-xs" >I agree.</button>&nbsp;&nbsp;&nbsp;&nbsp;
+</div>
+<script>
+    function accept_cookie_msg() {
+        document.cookie = "cookie_msg_viewed_v2=1;max-age=15768000;path=/";
+        hide_cookie_msg();
+    }
+    
+    function hide_cookie_msg() {
+        var cb = document.getElementById('cookie_msg');
+        if (cb) { cb.parentElement.removeChild(cb); }
+        var fcb = document.getElementById('footer_height_for_cookie_msg');
+        if (fcb) { fcb.parentElement.removeChild(fcb); }
+    }
+    
+    (function () {
+        var get_cookie        = function (name) {
+                var matches = document.cookie.match(new RegExp("(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"));
+                return matches ? decodeURIComponent(matches[1]) : undefined
+            },
+            cookie_msg_viewed = get_cookie('cookie_msg_viewed_v2'),
+            eea_country       = (function () {
+                var c = get_cookie('country');
+                return typeof(c)==='undefined'|| c.length !== 2 || c === "EU" || c === "VA" || c === "GF" || c === "GP" || c === "MQ" || c === "ME" || c === "YT" || c === "RE" || c === "MF" || c === "GI" || c === "AX" || c === "PM" || c === "GL" || c === "BL" || c === "SX" || c === "AW" || c === "CW" || c === "WF" || c === "PF" || c === "NC" || c === "TF" || c === "AI" || c === "BM" || c === "IO" || c === "VG" || c === "KY" || c === "FK" || c === "MS" || c === "PN" || c === "SH" || c === "GS" || c === "TC" || c === "AD" || c === "LI" || c === "MC" || c === "SM" || c === "VA" || c === "JE" || c === "GG" || c === "GI" || c === "GB" || c === "SE" || c === "ES" || c === "SI" || c === "SK" || c === "RO" || c === "PT" || c === "PL" || c === "NL" || c === "MT" || c === "LU" || c === "LT" || c === "LV" || c === "IT" || c === "IE" || c === "HU" || c === "GR" || c === "DE" || c === "FR" || c === "FI" || c === "EE" || c === "DK" || c === "CZ" || c === "CY" || c === "HR" || c === "BG" || c === "BE" || c === "AT" || c === "IS" || c === "LI" || c === "NO"
+            })();
+    
+        if (cookie_msg_viewed || eea_country === false) {
+            hide_cookie_msg();
+        }
+    })();
+</script>
+
+</body>
+</html>

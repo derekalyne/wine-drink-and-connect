@@ -62,9 +62,10 @@ class Wines(models.Model):
     price = models.FloatField(blank=True, null=True)
     designation = models.CharField(max_length=255, blank=True, null=True)
     locid = models.IntegerField(blank=True, null=True)
+   
 
     def __str__(self):
-        return "name: " + str(self.name) + " winery: " + str(self.winery) \
+        return "wid: "+str(self.wid)+" name: " + str(self.name) + " winery: " + str(self.winery) \
         + " year: " + str(self.year) + " variety: " + str(self.variety) \
         + " price: " + str(self.price) + " designation: " + str(self.designation) \
         + " locid: " + str(self.locid) 
