@@ -97,28 +97,3 @@ class WineLoc(models.Model):
     class Meta:
         managed = False
         db_table = "wines"
-
-
-class WineInfoReviews(models.Model):
-    wid = models.IntegerField(primary_key=True)
-    name = models.CharField(max_length=255)
-    winery = models.CharField(max_length=255, null=True)
-    year = models.IntegerField(null=True)
-    variety = models.CharField(max_length=255, null=True)
-    price = models.FloatField(null=True)
-    designation = models.CharField(max_length=255, null=True)
-    locid = models.IntegerField(null=True)
-    region = models.CharField(max_length=255, null=True)
-    province = models.CharField(max_length=255, null=True)
-    country = models.CharField(max_length=255, null=True)
-
-    def __str__(self):
-        return "name: " + str(self.name) + " winery: " + str(self.winery) \
-               + " year: " + str(self.year) + " variety: " + str(self.variety) \
-               + " price: " + str(self.price) + " designation: " + str(self.designation) \
-               + " locid: " + str(self.locid) + " region: " + str(self.designation) \
-               + " province: " + str(self.locid) + " country: " + str(self.designation) \
-
-    class Meta:
-        managed = False
-        db_table = "wines"
