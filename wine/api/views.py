@@ -7,6 +7,8 @@ from django.http import Http404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.exceptions import ObjectDoesNotExist
 from django.conf import settings
+from django.db import connection
+
 
 @api_view(['GET','POST'])
 def user_list(request, format=None):
@@ -95,28 +97,67 @@ def user_login(request, format=None):
         return Response("User Does Not Exist",status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def review_list(request, wid, format=None):
     """
-    API endpoint that return list of reviews and wine info for a given wine
+    GET: API endpoint that return list of reviews and wine info for a given wine
+    POST: API endpoint that creates a new review
     /api/reviews/{wid}
     """
+    if request.method == "GET":
+        data = []
+        members = Reviews.objects.raw("SELECT * from reviews where wid=%s", [wid])
+        page = request.GET.get('page', 1)
+        paginator = Paginator(members, 10)
+        try:
+            data = paginator.page(page)
+        except PageNotAnInteger:
+            data = paginator.page(1)
+        except EmptyPage:
+            data = paginator.page(paginator.num_pages)
 
-    data = []
-    members = Reviews.objects.raw("SELECT * from reviews where wid=%s", [wid])
-    page = request.GET.get('page', 1)
-    paginator = Paginator(members, 10)
-    try:
-        data = paginator.page(page)
-    except PageNotAnInteger:
-        data = paginator.page(1)
-    except EmptyPage:
-        data = paginator.page(paginator.num_pages)
+        serializer = ReviewsSerializer(data, context={'request': request}, many=True)
 
-    serializer = ReviewsSerializer(data, context={'request': request}, many=True)
+        return Response({'data': serializer.data, 'count': paginator.count, 'numpages': paginator.num_pages})
+    elif request.method == "POST":
+        serializer = ReviewsSerializer(data=request.data)
+        serializer.initial_data["wid"] = wid
+        if serializer.is_valid():
+            review_obj = serializer.data
+            with connection.cursor() as cursor:
+                cursor.execute("INSERT INTO reviews (description, rating, wid, username) VALUES (%s, %s, %s, %s)",
+                                [review_obj["description"], review_obj["rating"], review_obj["wid"], review_obj["username"]])
+                return Response(review_obj, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    return Response({'data': serializer.data, 'count': paginator.count, 'numpages': paginator.num_pages})
-    
+
+@api_view(['DELETE', 'PUT'])
+def review_update(request, rid, format=None):
+    """
+    DELETE: API endpoint that deletes a review of a wine by a user
+    /api/reviews/{rid}
+    """
+    if request.method == "DELETE":
+        with connection.cursor() as cursor:
+            try:
+                cursor.execute("DELETE FROM reviews WHERE rid = %s", [rid])
+                return Response(status=status.HTTP_200_OK)
+            except:
+                return Response("Could not delete", status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == "PUT":
+        serializer = ReviewsSerializer(data=request.data)
+        if serializer.is_valid():
+            review_obj = serializer.data
+            with connection.cursor() as cursor:
+                try:
+                    cursor.execute("UPDATE reviews SET description = %s, rating = %s WHERE rid = %s",
+                               [review_obj["description"], review_obj["rating"], rid])
+                    return Response(status=status.HTTP_200_OK)
+                except:
+                    return Response("Could not update", status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['GET'])
 def wine_list(request, format=None):

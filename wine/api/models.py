@@ -40,7 +40,7 @@ class Locations(models.Model):
 class Reviews(models.Model):
     rid = models.AutoField(primary_key=True)
     description = models.CharField(max_length=511)
-    rating = models.IntegerField(blank=True, null=True)
+    rating = models.IntegerField()
     wid = models.IntegerField()
     username = models.CharField(max_length=255)
 

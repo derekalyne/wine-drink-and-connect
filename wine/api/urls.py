@@ -6,7 +6,8 @@ urlpatterns = [
     path('drinkers/', views.user_list),
     path('drinkers/<str:username>', views.user_detail),
     path('login/', views.user_login),
-    path('reviews/<int:wid>', views.review_list),
+    path('reviews/wid/<int:wid>', views.review_list),
+    path('reviews/rid/<int:rid>', views.review_update),
     path('wines/', views.wine_list),
 ]
 
