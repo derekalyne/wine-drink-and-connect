@@ -1,5 +1,5 @@
-from .serializers import DrinkersSerializer, LocationsSerializer,ReviewsSerializer,WinesSerializer
-from .models import Drinkers,Locations,Reviews,Wines
+from .serializers import DrinkersSerializer, LocationsSerializer,ReviewsSerializer,WinesSerializer,WineLocSerializer
+from .models import Drinkers,Locations,Reviews,Wines,WineLoc
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -117,15 +117,77 @@ def review_list(request,wid,format=None):
     return Response({'data': serializer.data , 'count': paginator.count, 'numpages' : paginator.num_pages})
     
 
+# @api_view(['GET'])
+# def wine_list(request,format=None):
+#     """
+#     API endpoint that
+#     1. Get list of wines by name
+#     2. Paginated list with page size of 20
+#     3. In future add other searchable options
+#     /api/wines/?name={name}&?page={page}
+#     """
+#     name = request.GET.get('name')
+#     winery = request.GET.get('winery')
+#     year_gt = request.GET.get('year_gt')
+#     year_lt = request.GET.get('year_lt')
+#     variety = request.GET.get('variety')
+#     price_gt = request.GET.get('price_gt')
+#     price_lt = request.GET.get('price_lt')
+#     designation = request.GET.get('designation')
+#     data = []
+#     nextPage = 1
+#     previousPage = 1
+#     members = Wines.objects.all()
+#     if name:
+#         members = members.filter(name = name)
+#     if winery:
+#         members = members.filter(winery = winery)
+#     if year_gt:
+#         members = members.filter(year__gte = year_gt)
+#     if year_lt:
+#         members = members.filter(year__lte = year_lt)
+#     if variety:
+#         members = members.filter(variety = variety)
+#     if price_gt:
+#         members = members.filter(price__gte = price_gt)
+#     if price_lt:
+#         members = members.filter(price__lte = price_lt)
+#     if designation:
+#         members.members.filter(designation = designation)
+#
+#
+#     page = request.GET.get('page', 1)
+#     paginator = Paginator(members, 20)
+#     try:
+#         data = paginator.page(page)
+#     except PageNotAnInteger:
+#         data = paginator.page(1)
+#     except EmptyPage:
+#         data = paginator.page(paginator.num_pages)
+#
+#     serializer = WinesSerializer(data,context={'request': request} ,many=True)
+#     if data.has_next():
+#         nextPage = data.next_page_number()
+#     if data.has_previous():
+#         previousPage = data.previous_page_number()
+#     import os
+#     for dictionary in serializer.data:
+#         if os.path.exists(settings.BASE_DIR +'/image/wid'+ str(dictionary['wid'])):
+#             dictionary.update({'image1': request.META['HTTP_HOST']+'/static'+'/wid'+str(dictionary['wid'])+'/'+'0.jpg'})
+#             dictionary.update({'image2': request.META['HTTP_HOST']+'/static'+'/wid'+str(dictionary['wid'])+'/'+'1.jpg'})
+#
+#
+#     return Response({'data': serializer.data , 'count': paginator.count, 'numpages' : paginator.num_pages})
 @api_view(['GET'])
-def wine_list(request,format=None):
+def wine_list(request, format=None):
     """
-    API endpoint that 
+    API endpoint that
     1. Get list of wines by name
     2. Paginated list with page size of 20
     3. In future add other searchable options
     /api/wines/?name={name}&?page={page}
     """
+    wid = request.GET.get('wid')
     name = request.GET.get('name')
     winery = request.GET.get('winery')
     year_gt = request.GET.get('year_gt')
@@ -134,30 +196,13 @@ def wine_list(request,format=None):
     price_gt = request.GET.get('price_gt')
     price_lt = request.GET.get('price_lt')
     designation = request.GET.get('designation')
-    data = []
-    nextPage = 1
-    previousPage = 1
-    members = Wines.objects.all()
-    if name:
-        members = members.filter(name = name)
-    if winery:
-        members = members.filter(winery = winery)
-    if year_gt:
-        members = members.filter(year__gte = year_gt)
-    if year_lt:
-        members = members.filter(year__lte = year_lt)
-    if variety:
-        members = members.filter(variety = variety)
-    if price_gt:
-        members = members.filter(price__gte = price_gt)
-    if price_lt:
-        members = members.filter(price__lte = price_lt)
-    if designation:
-        members.members.filter(designation = designation)
-        
-    
+    sql_stmt, sql_conditionals = wine_list_sql_generator(wid, name, winery, year_gt, year_lt, variety, price_gt, price_lt, designation)
+    wines = WineLoc.objects.raw(sql_stmt, sql_conditionals)
+
     page = request.GET.get('page', 1)
-    paginator = Paginator(members, 20)
+    paginator = Paginator(wines, 20)
+
+    data = []
     try:
         data = paginator.page(page)
     except PageNotAnInteger:
@@ -165,18 +210,59 @@ def wine_list(request,format=None):
     except EmptyPage:
         data = paginator.page(paginator.num_pages)
 
-    serializer = WinesSerializer(data,context={'request': request} ,many=True)
+    serializer = WineLocSerializer(data, context={'request': request}, many=True)
+    previous_page = 1
+    next_page = 1
     if data.has_next():
-        nextPage = data.next_page_number()
+        next_page = data.next_page_number()
     if data.has_previous():
-        previousPage = data.previous_page_number()
+        previous_page = data.previous_page_number()
     import os
     for dictionary in serializer.data:
-        if os.path.exists(settings.BASE_DIR +'/image/wid'+ str(dictionary['wid'])):
-            dictionary.update({'image1': request.META['HTTP_HOST']+'/static'+'/wid'+str(dictionary['wid'])+'/'+'0.jpg'})
-            dictionary.update({'image2': request.META['HTTP_HOST']+'/static'+'/wid'+str(dictionary['wid'])+'/'+'1.jpg'})
-    
+        if os.path.exists(settings.BASE_DIR + '/image/wid' + str(dictionary['wid'])):
+            dictionary.update(
+                {'image1': request.META['HTTP_HOST'] + '/static' + '/wid' + str(dictionary['wid']) + '/' + '0.jpg'})
+            dictionary.update(
+                {'image2': request.META['HTTP_HOST'] + '/static' + '/wid' + str(dictionary['wid']) + '/' + '1.jpg'})
 
-    return Response({'data': serializer.data , 'count': paginator.count, 'numpages' : paginator.num_pages})
+    return Response({'data': serializer.data, 'count': paginator.count, 'numPages': paginator.num_pages, 'nextPage':next_page, 'previousPage':previous_page})
 
-    pass
+
+def wine_list_sql_generator(wid, name, winery, year_gt, year_lt, variety, price_gt, price_lt, designation):
+    sql_conditionals = []
+    sql_vars = []
+    if wid:
+        sql_conditionals.append("wid = " + str(wid))
+    if name:
+        sql_conditionals.append("name LIKE %s")
+        sql_vars.append("%" + str(name) + "%")
+    if winery:
+        sql_conditionals.append("winery LIKE %s")
+        sql_vars.append("%" + str(winery) + "%")
+    if year_gt:
+        sql_conditionals.append("year > " + str(year_gt))
+    if year_lt:
+        sql_conditionals.append("year < " + str(year_lt))
+    if variety:
+        sql_conditionals.append("variety LIKE %s")
+        sql_vars.append("%" + str(variety) + "%")
+    if price_gt:
+        sql_conditionals.append("price > " + str(price_gt))
+    if price_lt:
+        sql_conditionals.append("price < " + str(price_lt))
+    if designation:
+        sql_conditionals.append("designation LIKE %s")
+        sql_vars.append("%" + str(designation) + "%")
+
+    sql_stmt = "SELECT w.wid as wid, name, winery, year, variety, price, designation, l.locid as locid, region, province, country FROM wines w, locations l"
+
+    if len(sql_conditionals) > 0:
+        sql_stmt += " WHERE l.locid=w.locid AND " + ' AND '.join(sql_conditionals)
+    else:
+        sql_stmt += " WHERE l.locid=w.locid"
+        sql_vars = None
+
+    print(sql_stmt)
+    print(sql_vars)
+
+    return sql_stmt, sql_vars

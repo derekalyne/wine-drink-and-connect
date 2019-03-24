@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Drinkers,Locations,Reviews,Wines
+from .models import Drinkers,Locations,Reviews,Wines,WineLoc
 
 
 
@@ -29,3 +29,10 @@ class WinesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Wines 
         fields = ("wid","name","winery","year","variety","price","designation","locid")
+
+
+class WineLocSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = WineLoc
+        fields = ("wid","name","winery","year","variety","price","designation","locid","region","province","country")
