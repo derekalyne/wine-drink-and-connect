@@ -1,8 +1,6 @@
 import React from "react";
 import "assets/scss/blk-design-system-react.scss";
-import "assets/css/nucleo-icons.css";
-import PageHeader from 'components/PageHeader/PageHeader.jsx'
-import IndexNavbar from "components/Navbars/IndexNavbar.jsx";
+import ExamplesNavbar from "components/Navbars/ExamplesNavbar.jsx";
 import {
     Button,
     Label,
@@ -77,7 +75,7 @@ class Tables extends React.Component {
 
         return (
             <>
-                <IndexNavbar />
+                <ExamplesNavbar />
                 {/* search bar */}
                 <div style={{margin: 20}} className='section section-basic' >
 

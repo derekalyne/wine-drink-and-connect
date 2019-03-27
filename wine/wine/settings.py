@@ -25,9 +25,9 @@ SECRET_KEY = '4*uf&27hj89%(!t30f0f0=z9e-e7e_y#44h76#xdy1rgqt!7+f'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["sp19-cs411-46.cs.illinois.edu","127.0.0.1"]
+ALLOWED_HOSTS = ["sp19-cs411-46.cs.illinois.edu","127.0.0.1","http://localhost"]
 
-CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ORIGIN_WHITELIST = (
        'localhost:3000',

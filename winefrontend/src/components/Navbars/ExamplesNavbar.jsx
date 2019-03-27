@@ -76,8 +76,8 @@ class PagesNavbar extends React.Component {
               title="Designed and Coded by Creative Tim"
               tag={Link}
             >
-              <span>BLK• </span>
-              Design System React
+              <span>Wine!</span>
+               Drink and Connect
             </NavbarBrand>
             <button
               aria-expanded={this.state.collapseOpen}
@@ -100,7 +100,7 @@ class PagesNavbar extends React.Component {
               <Row>
                 <Col className="collapse-brand" xs="6">
                   <a href="#pablo" onClick={e => e.preventDefault()}>
-                    BLK•React
+                  Wine!
                   </a>
                 </Col>
                 <Col className="collapse-close text-right" xs="6">
@@ -116,49 +116,26 @@ class PagesNavbar extends React.Component {
             </div>
             <Nav navbar>
               <NavItem className="p-0">
-                <NavLink
-                  data-placement="bottom"
-                  href="https://twitter.com/CreativeTim"
-                  rel="noopener noreferrer"
-                  target="_blank"
-                  title="Follow us on Twitter"
-                >
+                <NavLink>
                   <i className="fab fa-twitter" />
                   <p className="d-lg-none d-xl-none">Twitter</p>
                 </NavLink>
               </NavItem>
               <NavItem className="p-0">
-                <NavLink
-                  data-placement="bottom"
-                  href="https://www.facebook.com/CreativeTim"
-                  rel="noopener noreferrer"
-                  target="_blank"
-                  title="Like us on Facebook"
-                >
+                <NavLink>
                   <i className="fab fa-facebook-square" />
                   <p className="d-lg-none d-xl-none">Facebook</p>
                 </NavLink>
               </NavItem>
               <NavItem className="p-0">
-                <NavLink
-                  data-placement="bottom"
-                  href="https://www.instagram.com/CreativeTimOfficial"
-                  rel="noopener noreferrer"
-                  target="_blank"
-                  title="Follow us on Instagram"
-                >
+                <NavLink>
                   <i className="fab fa-instagram" />
                   <p className="d-lg-none d-xl-none">Instagram</p>
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink tag={Link} to="/">
-                  Back to Kit
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink href="https://github.com/creativetimofficial/blk-design-system-react/issues">
-                  Have an issue?
+                <NavLink tag={Link} to="/tables">
+                  Wine Collection
                 </NavLink>
               </NavItem>
             </Nav>

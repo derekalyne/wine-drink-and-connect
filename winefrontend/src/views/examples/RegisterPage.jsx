@@ -1,5 +1,7 @@
 import React from "react";
 import classnames from "classnames";
+import  winepic  from 'assets/img/wine4.jpg';
+
 // reactstrap components
 import {
   Button,
@@ -28,7 +30,9 @@ import Footer from "components/Footer/Footer.jsx";
 class RegisterPage extends React.Component {
   state = {
     squares1to6: "",
-    squares7and8: ""
+    squares7and8: "",
+    Password: "",
+    Username: "",
   };
   componentDidMount() {
     document.body.classList.toggle("register-page");
@@ -41,6 +45,8 @@ class RegisterPage extends React.Component {
       this.followCursor
     );
   }
+
+
   followCursor = event => {
     let posX = event.clientX - window.innerWidth / 2;
     let posY = event.clientY - window.innerWidth / 6;
@@ -59,7 +65,38 @@ class RegisterPage extends React.Component {
         "deg)"
     });
   };
+
+
+  login = () =>{
+    var url = `http://sp19-cs411-46.cs.illinois.edu:8000/api/login`;
+    fetch(url,
+        {
+            mode:'no-cors',
+            method: "POST",
+            
+            body:{
+              username: this.state.Username,
+              password: this.state.Password
+            }
+        }).then( (e) => {
+            console.log(e);
+            return e.json()
+        })
+        .catch( (e) => { return console.error("Error:", e) })
+        .then(e => {
+            this.setState({ tableData: e });
+            return console.log("Success:", e)
+        });
+  }
+
+
   render() {
+
+    const buttonGroup = {
+      justifyContent: 'space-around',
+      display: 'flex'
+    };
+
     return (
       <>
         <ExamplesNavbar />
@@ -86,7 +123,7 @@ class RegisterPage extends React.Component {
                           alt="..."
                           src={require("assets/img/square-purple-1.png")}
                         />
-                        <CardTitle tag="h4">Register</CardTitle>
+                        <CardTitle tag="h4">Wine!</CardTitle>
                       </CardHeader>
                       <CardBody>
                         <Form className="form">
@@ -101,7 +138,7 @@ class RegisterPage extends React.Component {
                               </InputGroupText>
                             </InputGroupAddon>
                             <Input
-                              placeholder="Full Name"
+                              placeholder="Username"
                               type="text"
                               onFocus={e =>
                                 this.setState({ fullNameFocus: true })
@@ -109,25 +146,11 @@ class RegisterPage extends React.Component {
                               onBlur={e =>
                                 this.setState({ fullNameFocus: false })
                               }
+                              value={this.state.Username}
+                              onChange={e => this.setState({Username: e.target.value})}
                             />
                           </InputGroup>
-                          <InputGroup
-                            className={classnames({
-                              "input-group-focus": this.state.emailFocus
-                            })}
-                          >
-                            <InputGroupAddon addonType="prepend">
-                              <InputGroupText>
-                                <i className="tim-icons icon-email-85" />
-                              </InputGroupText>
-                            </InputGroupAddon>
-                            <Input
-                              placeholder="Email"
-                              type="text"
-                              onFocus={e => this.setState({ emailFocus: true })}
-                              onBlur={e => this.setState({ emailFocus: false })}
-                            />
-                          </InputGroup>
+                          
                           <InputGroup
                             className={classnames({
                               "input-group-focus": this.state.passwordFocus
@@ -140,34 +163,28 @@ class RegisterPage extends React.Component {
                             </InputGroupAddon>
                             <Input
                               placeholder="Password"
-                              type="text"
+                              type="password"
                               onFocus={e =>
                                 this.setState({ passwordFocus: true })
                               }
                               onBlur={e =>
                                 this.setState({ passwordFocus: false })
                               }
+                              value={this.state.Password}
+                              onChange={e => this.setState({Password: e.target.value})}
                             />
                           </InputGroup>
-                          <FormGroup check className="text-left">
-                            <Label check>
-                              <Input type="checkbox" />
-                              <span className="form-check-sign" />I agree to the{" "}
-                              <a
-                                href="#pablo"
-                                onClick={e => e.preventDefault()}
-                              >
-                                terms and conditions
-                              </a>
-                              .
-                            </Label>
-                          </FormGroup>
                         </Form>
                       </CardBody>
                       <CardFooter>
-                        <Button className="btn-round" color="primary" size="lg">
-                          Get Started
+                        <div style = {buttonGroup}>
+                        <Button className="btn-round" color="primary" size="lg" onClick = {this.login}>
+                          Log In
                         </Button>
+                        <Button className="btn-round" color="primary" size="lg">
+                          Register
+                        </Button>
+                        </div>
                       </CardFooter>
                     </Card>
                   </Col>
@@ -177,22 +194,17 @@ class RegisterPage extends React.Component {
                   className="square square-1"
                   id="square1"
                   style={{ transform: this.state.squares1to6 }}
-                />
-                <div
-                  className="square square-2"
-                  id="square2"
-                  style={{ transform: this.state.squares1to6 }}
-                />
+                >
+                <img src={winepic}/>
+                </div>
+               
                 <div
                   className="square square-3"
                   id="square3"
                   style={{ transform: this.state.squares1to6 }}
                 />
-                <div
-                  className="square square-4"
-                  id="square4"
-                  style={{ transform: this.state.squares1to6 }}
-                />
+               
+                
                 <div
                   className="square square-5"
                   id="square5"
@@ -206,7 +218,6 @@ class RegisterPage extends React.Component {
               </Container>
             </div>
           </div>
-          <Footer />
         </div>
       </>
     );
