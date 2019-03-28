@@ -9,6 +9,10 @@ https://docs.djangoproject.com/en/2.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
+class DisableCSRF(object):
+    def process_request(self, request):
+            setattr(request, '_dont_enforce_csrf_checks', True)
+
 
 import os
 
@@ -68,6 +72,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware'
 ]
+
+MIDDLEWARE_CLASSES = (
+    DisableCSRF,
+)
 
 ROOT_URLCONF = 'wine.urls'
 
