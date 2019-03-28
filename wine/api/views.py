@@ -9,12 +9,17 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.conf import settings
 from django.db import connection
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 
 
+class CsrfExemptSessionAuthentication(SessionAuthentication):
+    def enforce_csrf(self, request):
+        return  # To not perform the csrf check previously happening
 
 @api_view(['GET','POST'])
 @csrf_exempt
 def user_list(request, format=None):
+
     """
     API endpoint that gives all users when GET
     and creates a new user when POST
@@ -41,7 +46,7 @@ def user_list(request, format=None):
             previousPage = data.previous_page_number()
 
         return Response({'data': serializer.data , 'count': paginator.count, 'numpages' : paginator.num_pages})
-
+    
     elif request.method == 'POST':
         serializer = DrinkersSerializer(data=request.data)
         if serializer.is_valid():
@@ -167,7 +172,6 @@ def review_update(request, rid, format=None):
 
 
 @api_view(['GET'])
-@csrf_exempt
 def wine_list(request, format=None):
     """
     API endpoint that

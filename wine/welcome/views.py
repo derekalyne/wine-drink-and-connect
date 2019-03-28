@@ -9,6 +9,8 @@ import logging
 from django.views.generic import View
 from django.http import HttpResponse
 from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+
 import os
 
 def index(request):
@@ -53,7 +55,7 @@ class FrontendAppView(View):
     Serves the compiled frontend entry point (only works if you have run `yarn
     run build`).
     """
-
+    @csrf_exempt
     def get(self, request):
         try:
             with open(os.path.join(settings.REACT_APP_DIR, 'build', 'index.html')) as f:
