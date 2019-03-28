@@ -1,6 +1,4 @@
 import React from 'react';
 
-export default React.createContext({
-    wid:'',
-    username:''
-});
+export default React.createContext(
+   );

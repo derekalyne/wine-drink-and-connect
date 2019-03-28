@@ -1,6 +1,7 @@
 import React from "react";
 import classnames from "classnames";
 import  winepic  from 'assets/img/wine4.jpg';
+import WineContext from "../Context/wine-context"
 
 
 // reactstrap components
@@ -25,8 +26,7 @@ import {
 } from "reactstrap";
 
 // core components
-import ExamplesNavbar from "components/Navbars/ExamplesNavbar.jsx";
-import Footer from "components/Footer/Footer.jsx";
+import ExamplesNavbar from "./ExamplesNavbar";
 
 function getCookie(name) {
   if (!document.cookie) {
@@ -45,6 +45,7 @@ function getCookie(name) {
 const csrftoken = getCookie('csrftoken')
 
 class RegisterPage extends React.Component {
+  static contextType = WineContext;
   state = {
     squares1to6: "",
     squares7and8: "",
@@ -99,13 +100,19 @@ class RegisterPage extends React.Component {
             },
         }).then( (e) => {
             console.log(e);
+            if(e.status == 200){
+              this.setState({ message: "Success! You are logged in! You can access your profile by clicking your name on the top right corner!" });
+              this.context.updateUsername(this.state.Username);
+              
+            }
+            else{
+              this.setState({ message: "Your combination is not correct, please try again." });
+
+            }
             return e.json()
         })
-        .catch( (e) => { return console.error("Error:", e) })
-        .then(e => {
-            this.setState({ message: "Success! Please wait till we redirect you to your profile page!" });
-            return console.log("Success:", e)
-        });
+      
+       
   }
 
   register = () =>{
@@ -122,13 +129,14 @@ class RegisterPage extends React.Component {
             },
         }).then( (e) => {
             console.log(e);
+            if(e.status == 201){
+              this.setState({ message: "Success! You can now update your personal info!" });
+            }else{
+              this.setState({ message: "Please try another Username. Thank you!" });
+            }
             return e.json()
         })
-        .catch( (e) => { return console.error("Error:", e) })
-        .then(e => {
-            this.setState({ message: "Success! You can now update your personal info!" });
-            return console.log("Success:", e)
-        });
+      
   }
 
 
