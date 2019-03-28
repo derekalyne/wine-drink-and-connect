@@ -8,9 +8,12 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.exceptions import ObjectDoesNotExist
 from django.conf import settings
 from django.db import connection
+from django.views.decorators.csrf import csrf_exempt
+
 
 
 @api_view(['GET','POST'])
+@csrf_exempt
 def user_list(request, format=None):
     """
     API endpoint that gives all users when GET
@@ -47,6 +50,7 @@ def user_list(request, format=None):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET','PUT'])
+@csrf_exempt
 def user_detail(request,username,format=None):
     """
     API endpoint that gives specific users when GET
@@ -80,6 +84,7 @@ def user_detail(request,username,format=None):
 
 
 @api_view(['POST'])
+@csrf_exempt
 def user_login(request, format=None):
     """
     API endpoint that checks the input username and password and returns a match or fail as login token
@@ -98,6 +103,7 @@ def user_login(request, format=None):
 
 
 @api_view(['GET', 'POST'])
+@csrf_exempt
 def review_list(request, wid, format=None):
     """
     GET: API endpoint that return list of reviews and wine info for a given wine
@@ -132,6 +138,7 @@ def review_list(request, wid, format=None):
 
 
 @api_view(['DELETE', 'PUT'])
+@csrf_exempt
 def review_update(request, rid, format=None):
     """
     DELETE: API endpoint that deletes a review of a wine by a user
@@ -160,6 +167,7 @@ def review_update(request, rid, format=None):
 
 
 @api_view(['GET'])
+@csrf_exempt
 def wine_list(request, format=None):
     """
     API endpoint that

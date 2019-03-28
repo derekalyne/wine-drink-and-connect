@@ -133,11 +133,21 @@ class PagesNavbar extends React.Component {
                   <p className="d-lg-none d-xl-none">Instagram</p>
                 </NavLink>
               </NavItem>
-              <NavItem>
-                <NavLink tag={Link} to="/tables">
+              <NavItem className="p-0">
+                <NavLink tag={Link} to="register-page">
+                  Log In or Register
+                </NavLink>
+                </NavItem>
+                <NavItem className="p-0">
+                <NavLink tag={Link} to="tables">
                   Wine Collection
                 </NavLink>
-              </NavItem>
+                </NavItem>
+                <NavItem className="p-0">
+                <NavLink tag={Link} to="profile-page">
+                  Your Profile
+                </NavLink>
+                </NavItem>
             </Nav>
           </Collapse>
         </Container>

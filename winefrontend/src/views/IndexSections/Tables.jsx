@@ -1,5 +1,4 @@
 import React from "react";
-import "assets/scss/blk-design-system-react.scss";
 import ExamplesNavbar from "components/Navbars/ExamplesNavbar.jsx";
 import {
     Button,

@@ -6,8 +6,6 @@ import "assets/css/nucleo-icons.css";
 import "assets/css/blk-design-system-react.css";
 import "assets/demo/demo.css";
 
-import Index from "views/Index.jsx";
-import LandingPage from "views/examples/LandingPage.jsx";
 import RegisterPage from "views/examples/RegisterPage.jsx";
 import ProfilePage from "views/examples/ProfilePage.jsx";
 import Tables from "views/IndexSections/Tables.jsx";
@@ -16,15 +14,18 @@ ReactDOM.render(
   <BrowserRouter>
     <Switch>
       <Route
-            path="/tables"
-            render={props => <Tables {...props} />}
-        /> 
-      <Route
-        path="/register-page"
+        path="/welcome/register-page"
         render={props => <RegisterPage {...props} />}
       />
-    
-      <Redirect from="/" to="/tables" />
+      <Route
+        path="/welcome/profile-page"
+        render={props => <ProfilePage {...props} />}
+      />
+      <Route
+            path="/welcome/tables"
+            render={props => <Tables {...props} />}
+      /> 
+    <Redirect to="/welcome/register-page"/>
     </Switch>
   </BrowserRouter>,
   document.getElementById("root")

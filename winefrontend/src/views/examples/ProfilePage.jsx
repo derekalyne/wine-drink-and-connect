@@ -2,6 +2,8 @@ import React from "react";
 import classnames from "classnames";
 // javascript plugin used to create scrollbars on windows
 import PerfectScrollbar from "perfect-scrollbar";
+
+
 // reactstrap components
 import {
   Button,
@@ -54,10 +56,70 @@ class ProfilePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      tabs: 1
+      tabs: 1,
+      userinfo:{
+        name:'',
+        age:'',
+        gender:''
+      },
+      name:'',
+      password:'',
+      gender:'',
+      age:''
     };
   }
+
+  UpdateUserInfo = () =>{
+    var url = `http://sp19-cs411-46.cs.illinois.edu:8000/api/drinkers/ZoeVaughan`;
+    var formData  = new FormData();
+    formData.append("username","ZoeVaughan")
+    formData.append("name",this.state.name)
+    formData.append("password",this.state.password)
+    formData.append("gender",this.state.gender)
+    formData.append("password",this.state.password)
+    formData.append("age",this.state.age)
+    fetch(url,
+        {
+            method: "PUT",
+            body: formData,
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+        }).then( (e) => {
+            console.log(e);
+            return e.json()
+        })
+        .catch( (e) => { return console.error("Error:", e) })
+        .then(e => {
+            this.setState({ message: "Success! You can now update your personal info!" });
+            this.GetUserInfo();
+            return console.log("Success:", e)
+        });
+      
+  }
+
+  GetUserInfo = () =>{
+    var url = `http://sp19-cs411-46.cs.illinois.edu:8000/api/drinkers/ZoeVaughan`;
+  
+    fetch(url,
+        {
+            method: "GET"
+        }).then( (e) => {
+            console.log(e);
+            return e.json()
+        })
+        .catch( (e) => { return console.error("Error:", e) })
+        .then(e => {
+            this.setState({ userinfo: e });
+            return console.log("Success:", e)
+        });
+  }
+
+
+
   componentDidMount() {
+    this.GetUserInfo()
     if (navigator.platform.indexOf("Win") > -1) {
       document.documentElement.className += " perfect-scrollbar-on";
       document.documentElement.classList.remove("perfect-scrollbar-off");
@@ -101,52 +163,9 @@ class ProfilePage extends React.Component {
             <Container className="align-items-center">
               <Row>
                 <Col lg="6" md="6">
-                  <h1 className="profile-title text-left">Mike Scheinder</h1>
+                  <h1 className="profile-title text-left" style={{fontSize:"150px"}}>{this.state.userinfo.name}</h1>
                   <h5 className="text-on-back">01</h5>
-                  <p className="profile-description">
-                    Offices parties lasting outward nothing age few resolve.
-                    Impression to discretion understood to we interested he
-                    excellence. Him remarkably use projection collecting. Going
-                    about eat forty world has round miles.
-                  </p>
-                  <div className="btn-wrapper profile pt-3">
-                    <Button
-                      className="btn-icon btn-round"
-                      color="twitter"
-                      href="https://twitter.com/creativetim"
-                      id="tooltip639225725"
-                      target="_blank"
-                    >
-                      <i className="fab fa-twitter" />
-                    </Button>
-                    <UncontrolledTooltip delay={0} target="tooltip639225725">
-                      Follow us
-                    </UncontrolledTooltip>
-                    <Button
-                      className="btn-icon btn-round"
-                      color="facebook"
-                      href="https://www.facebook.com/creativetim"
-                      id="tooltip982846143"
-                      target="_blank"
-                    >
-                      <i className="fab fa-facebook-square" />
-                    </Button>
-                    <UncontrolledTooltip delay={0} target="tooltip982846143">
-                      Like us
-                    </UncontrolledTooltip>
-                    <Button
-                      className="btn-icon btn-round"
-                      color="dribbble"
-                      href="https://dribbble.com/creativetim"
-                      id="tooltip951161185"
-                      target="_blank"
-                    >
-                      <i className="fab fa-dribbble" />
-                    </Button>
-                    <UncontrolledTooltip delay={0} target="tooltip951161185">
-                      Follow us
-                    </UncontrolledTooltip>
-                  </div>
+                 
                 </Col>
                 <Col className="ml-auto mr-auto" lg="4" md="6">
                   <Card className="card-coin card-plain">
@@ -154,9 +173,9 @@ class ProfilePage extends React.Component {
                       <img
                         alt="..."
                         className="img-center img-fluid rounded-circle"
-                        src={require("assets/img/mike.jpg")}
+                        src={require("assets/img/wine3.jpg")}
                       />
-                      <h4 className="title">Transactions</h4>
+                      <h4 className="title">Personal Profile</h4>
                     </CardHeader>
                     <CardBody>
                       <Nav
@@ -171,20 +190,10 @@ class ProfilePage extends React.Component {
                             onClick={e => this.toggleTabs(e, "tabs", 1)}
                             href="#pablo"
                           >
-                            Wallet
+                            Basic Info
                           </NavLink>
                         </NavItem>
-                        <NavItem>
-                          <NavLink
-                            className={classnames({
-                              active: this.state.tabs === 2
-                            })}
-                            onClick={e => this.toggleTabs(e, "tabs", 2)}
-                            href="#pablo"
-                          >
-                            Send
-                          </NavLink>
-                        </NavItem>
+                       
                         <NavItem>
                           <NavLink
                             className={classnames({
@@ -193,7 +202,7 @@ class ProfilePage extends React.Component {
                             onClick={e => this.toggleTabs(e, "tabs", 3)}
                             href="#pablo"
                           >
-                            News
+                            Favorite Wine
                           </NavLink>
                         </NavItem>
                       </Nav>
@@ -203,79 +212,40 @@ class ProfilePage extends React.Component {
                       >
                         <TabPane tabId="tab1">
                           <Table className="tablesorter" responsive>
-                            <thead className="text-primary">
-                              <tr>
-                                <th className="header">COIN</th>
-                                <th className="header">AMOUNT</th>
-                                <th className="header">VALUE</th>
-                              </tr>
-                            </thead>
+                           
                             <tbody>
                               <tr>
-                                <td>BTC</td>
-                                <td>7.342</td>
-                                <td>48,870.75 USD</td>
+                                <td>Name</td>
+                                <td>{this.state.userinfo.name}</td>
                               </tr>
                               <tr>
-                                <td>ETH</td>
-                                <td>30.737</td>
-                                <td>64,53.30 USD</td>
+                                <td>Age</td>
+                                <td>{this.state.userinfo.age}</td>
                               </tr>
                               <tr>
-                                <td>XRP</td>
-                                <td>19.242</td>
-                                <td>18,354.96 USD</td>
+                                <td>Gender</td>
+                                <td>{this.state.userinfo.gender}</td>
                               </tr>
                             </tbody>
                           </Table>
                         </TabPane>
-                        <TabPane tabId="tab2">
-                          <Row>
-                            <Label sm="3">Pay to</Label>
-                            <Col sm="9">
-                              <FormGroup>
-                                <Input
-                                  placeholder="e.g. 1Nasd92348hU984353hfid"
-                                  type="text"
-                                />
-                                <FormText color="default" tag="span">
-                                  Please enter a valid address.
-                                </FormText>
-                              </FormGroup>
-                            </Col>
-                          </Row>
-                          <Row>
-                            <Label sm="3">Amount</Label>
-                            <Col sm="9">
-                              <FormGroup>
-                                <Input placeholder="1.587" type="text" />
-                              </FormGroup>
-                            </Col>
-                          </Row>
-                          <Button
-                            className="btn-simple btn-icon btn-round float-right"
-                            color="primary"
-                            type="submit"
-                          >
-                            <i className="tim-icons icon-send" />
-                          </Button>
-                        </TabPane>
+                       
                         <TabPane tabId="tab3">
                           <Table className="tablesorter" responsive>
                             <thead className="text-primary">
                               <tr>
-                                <th className="header">Latest Crypto News</th>
+                                <th className="header">Your favorite wine collections</th>
                               </tr>
                             </thead>
                             <tbody>
                               <tr>
-                                <td>The Daily: Nexo to Pay on Stable...</td>
+                                <td>Point Noir</td>
                               </tr>
                               <tr>
-                                <td>Venezuela Begins Public of Nation...</td>
+                                <td>Rose</td>
                               </tr>
                               <tr>
-                                <td>PR: BitCanna – Dutch Blockchain...</td>
+                                <td>Cola</td>
                               </tr>
                             </tbody>
                           </Table>
@@ -296,33 +266,12 @@ class ProfilePage extends React.Component {
                   </Row>
                 </Col>
                 <Col md="5">
-                  <h1 className="profile-title text-left">Projects</h1>
+                  <h1 className="profile-title text-left">Placeholder for user's favorite wine review</h1>
                   <h5 className="text-on-back">02</h5>
                   <p className="profile-description text-left">
-                    An artist of considerable range, Ryan — the name taken by
-                    Melbourne-raised, Brooklyn-based Nick Murphy — writes,
-                    performs and records all of his own music, giving it a warm,
-                    intimate feel with a solid groove structure. An artist of
-                    considerable range.
+                    This wine is so good I want to cry. Shut up and buy me some more.
                   </p>
-                  <div className="btn-wrapper pt-3">
-                    <Button
-                      className="btn-simple"
-                      color="primary"
-                      href="#pablo"
-                      onClick={e => e.preventDefault()}
-                    >
-                      <i className="tim-icons icon-book-bookmark" /> Bookmark
-                    </Button>
-                    <Button
-                      className="btn-simple"
-                      color="info"
-                      href="#pablo"
-                      onClick={e => e.preventDefault()}
-                    >
-                      <i className="tim-icons icon-bulb-63" /> Check it!
-                    </Button>
-                  </div>
+                 
                 </Col>
               </Row>
             </Container>
@@ -333,7 +282,7 @@ class ProfilePage extends React.Component {
                 <Col md="6">
                   <Card className="card-plain">
                     <CardHeader>
-                      <h1 className="profile-title text-left">Contact</h1>
+                      <h1 className="profile-title text-left">Update your Info</h1>
                       <h5 className="text-on-back">03</h5>
                     </CardHeader>
                     <CardBody>
@@ -342,15 +291,17 @@ class ProfilePage extends React.Component {
                           <Col md="6">
                             <FormGroup>
                               <label>Your Name</label>
-                              <Input defaultValue="Mike" type="text" />
+                              <Input  value={this.state.name}
+                                           onChange={e => this.setState({name: e.target.value})} />
                             </FormGroup>
                           </Col>
                           <Col md="6">
                             <FormGroup>
-                              <label>Email address</label>
+                              <label>Password</label>
                               <Input
-                                placeholder="mike@email.com"
-                                type="email"
+                                type="password"
+                                value={this.state.password}
+                                           onChange={e => this.setState({password: e.target.value})}
                               />
                             </FormGroup>
                           </Col>
@@ -358,77 +309,46 @@ class ProfilePage extends React.Component {
                         <Row>
                           <Col md="6">
                             <FormGroup>
-                              <label>Phone</label>
-                              <Input defaultValue="001-12321345" type="text" />
+                              <label>Age</label>
+                              <Input value={this.state.age}
+                                           onChange={e => this.setState({age: e.target.value})} />
                             </FormGroup>
                           </Col>
                           <Col md="6">
                             <FormGroup>
-                              <label>Company</label>
-                              <Input defaultValue="CreativeTim" type="text" />
+                              <label>Gender</label>
+                              <Input value={this.state.gender}
+                                           onChange={e => this.setState({gender: e.target.value})} />
                             </FormGroup>
                           </Col>
                         </Row>
-                        <Row>
-                          <Col md="12">
-                            <FormGroup>
-                              <label>Message</label>
-                              <Input placeholder="Hello there!" type="text" />
-                            </FormGroup>
-                          </Col>
-                        </Row>
+                      
                         <Button
                           className="btn-round float-right"
                           color="primary"
                           data-placement="right"
                           id="tooltip341148792"
                           type="button"
+                          onClick = {this.UpdateUserInfo}
                         >
-                          Send text
+                          Update
                         </Button>
                         <UncontrolledTooltip
                           delay={0}
                           placement="right"
                           target="tooltip341148792"
                         >
-                          Can't wait for your message
+                          Click to update your info!
                         </UncontrolledTooltip>
                       </Form>
                     </CardBody>
                   </Card>
                 </Col>
-                <Col className="ml-auto" md="4">
-                  <div className="info info-horizontal">
-                    <div className="icon icon-primary">
-                      <i className="tim-icons icon-square-pin" />
-                    </div>
-                    <div className="description">
-                      <h4 className="info-title">Find us at the office</h4>
-                      <p>
-                        Bld Mihail Kogalniceanu, nr. 8, <br />
-                        7652 Bucharest, <br />
-                        Romania
-                      </p>
-                    </div>
-                  </div>
-                  <div className="info info-horizontal">
-                    <div className="icon icon-primary">
-                      <i className="tim-icons icon-mobile" />
-                    </div>
-                    <div className="description">
-                      <h4 className="info-title">Give us a ring</h4>
-                      <p>
-                        Michael Jordan <br />
-                        +40 762 321 762 <br />
-                        Mon - Fri, 8:00-22:00
-                      </p>
-                    </div>
-                  </div>
-                </Col>
+                
               </Row>
             </Container>
           </section>
-          <Footer />
+          
         </div>
       </>
     );

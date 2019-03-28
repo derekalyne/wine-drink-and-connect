@@ -2,6 +2,7 @@ import React from "react";
 import classnames from "classnames";
 import  winepic  from 'assets/img/wine4.jpg';
 
+
 // reactstrap components
 import {
   Button,
@@ -33,6 +34,7 @@ class RegisterPage extends React.Component {
     squares7and8: "",
     Password: "",
     Username: "",
+    message:"",
   };
   componentDidMount() {
     document.body.classList.toggle("register-page");
@@ -68,23 +70,49 @@ class RegisterPage extends React.Component {
 
 
   login = () =>{
-    var url = `http://sp19-cs411-46.cs.illinois.edu:8000/api/login`;
+    var url = `http://sp19-cs411-46.cs.illinois.edu:8000/api/login/`;
+    var formData  = new FormData();
+    formData.append("username",this.state.Username)
+    formData.append("password",this.state.Password)
     fetch(url,
         {
-            mode:'no-cors',
             method: "POST",
-            
-            body:{
-              username: this.state.Username,
-              password: this.state.Password
-            }
+            body: formData,
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
         }).then( (e) => {
             console.log(e);
             return e.json()
         })
         .catch( (e) => { return console.error("Error:", e) })
         .then(e => {
-            this.setState({ tableData: e });
+            this.setState({ message: "Success! Please wait till we redirect you to your profile page!" });
+            return console.log("Success:", e)
+        });
+  }
+
+  register = () =>{
+    var url = `http://sp19-cs411-46.cs.illinois.edu:8000/api/drinkers/`;
+    var formData  = new FormData();
+    formData.append("username",this.state.Username)
+    formData.append("password",this.state.Password)
+    fetch(url,
+        {
+            method: "POST",
+            body: formData,
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+        }).then( (e) => {
+            console.log(e);
+            return e.json()
+        })
+        .catch( (e) => { return console.error("Error:", e) })
+        .then(e => {
+            this.setState({ message: "Success! You can now update your personal info!" });
             return console.log("Success:", e)
         });
   }
@@ -125,6 +153,7 @@ class RegisterPage extends React.Component {
                         />
                         <CardTitle tag="h4">Wine!</CardTitle>
                       </CardHeader>
+                      <p style = {{textAlign : "center"}}>{this.state.message}</p>
                       <CardBody>
                         <Form className="form">
                           <InputGroup
@@ -181,7 +210,7 @@ class RegisterPage extends React.Component {
                         <Button className="btn-round" color="primary" size="lg" onClick = {this.login}>
                           Log In
                         </Button>
-                        <Button className="btn-round" color="primary" size="lg">
+                        <Button className="btn-round" color="primary" size="lg" onClick = {this.register}>
                           Register
                         </Button>
                         </div>
