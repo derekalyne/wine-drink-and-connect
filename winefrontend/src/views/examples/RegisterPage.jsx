@@ -28,6 +28,22 @@ import {
 import ExamplesNavbar from "components/Navbars/ExamplesNavbar.jsx";
 import Footer from "components/Footer/Footer.jsx";
 
+function getCookie(name) {
+  if (!document.cookie) {
+    return null;
+  }
+  const token = document.cookie.split(';')
+    .map(c => c.trim())
+    .filter(c => c.startsWith(name + '='));
+
+  if (token.length === 0) {
+    return null;
+  }
+  return decodeURIComponent(token[0].split('=')[1]);
+}
+
+const csrftoken = getCookie('csrftoken')
+
 class RegisterPage extends React.Component {
   state = {
     squares1to6: "",
@@ -70,7 +86,7 @@ class RegisterPage extends React.Component {
 
 
   login = () =>{
-    var url = `http://sp19-cs411-46.cs.illinois.edu:8000/api/login/`;
+    var url = `http://127.0.0.1:8000/api/login/`;
     var formData  = new FormData();
     formData.append("username",this.state.Username)
     formData.append("password",this.state.Password)
@@ -79,8 +95,7 @@ class RegisterPage extends React.Component {
             method: "POST",
             body: formData,
             headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
+              'X-CSRFToken': csrftoken
             },
         }).then( (e) => {
             console.log(e);
@@ -94,7 +109,7 @@ class RegisterPage extends React.Component {
   }
 
   register = () =>{
-    var url = `http://sp19-cs411-46.cs.illinois.edu:8000/api/drinkers/`;
+    var url = `http://127.0.0.1:8000/api/drinkers/`;
     var formData  = new FormData();
     formData.append("username",this.state.Username)
     formData.append("password",this.state.Password)
@@ -103,8 +118,7 @@ class RegisterPage extends React.Component {
             method: "POST",
             body: formData,
             headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
+              'X-CSRFToken': csrftoken
             },
         }).then( (e) => {
             console.log(e);

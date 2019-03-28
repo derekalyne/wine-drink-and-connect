@@ -32,6 +32,22 @@ import {
 import ExamplesNavbar from "components/Navbars/ExamplesNavbar.jsx";
 import Footer from "components/Footer/Footer.jsx";
 
+function getCookie(name) {
+  if (!document.cookie) {
+    return null;
+  }
+  const token = document.cookie.split(';')
+    .map(c => c.trim())
+    .filter(c => c.startsWith(name + '='));
+
+  if (token.length === 0) {
+    return null;
+  }
+  return decodeURIComponent(token[0].split('=')[1]);
+}
+
+const csrftoken = getCookie('csrftoken')
+
 const carouselItems = [
   {
     src: require("assets/img/denys.jpg"),
@@ -83,8 +99,7 @@ class ProfilePage extends React.Component {
             method: "PUT",
             body: formData,
             headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
+              'X-CSRFToken': csrftoken
             },
         }).then( (e) => {
             console.log(e);
