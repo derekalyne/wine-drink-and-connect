@@ -9,6 +9,7 @@ urlpatterns = [
     path('login/', csrf_exempt(views.user_login)),
     path('reviews/wid/<int:wid>', csrf_exempt(views.review_list)),
     path('reviews/rid/<int:rid>', csrf_exempt(views.review_update)),
+    path('reviews/username/<str:username>', csrf_exempt(views.review_from_user)),
     path('wines/', csrf_exempt(views.wine_list)),
 ]
 

@@ -1,5 +1,5 @@
-from .serializers import DrinkersSerializer, LocationsSerializer,ReviewsSerializer,WinesSerializer,WineLocSerializer
-from .models import Drinkers,Locations,Reviews,Wines,WineLoc
+from .serializers import DrinkersSerializer, LocationsSerializer,ReviewsSerializer,WinesSerializer,WineLocSerializer,ReviewAndWineInfoSerializer
+from .models import Drinkers,Locations,Reviews,Wines,WineLoc,ReviewAndWineInfo
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -53,6 +53,7 @@ def user_list(request, format=None):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['GET','PUT'])
 @csrf_exempt
@@ -140,6 +141,42 @@ def review_list(request, wid, format=None):
                                 [review_obj["description"], review_obj["rating"], review_obj["wid"], review_obj["username"]])
                 return Response(review_obj, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@csrf_exempt
+def review_from_user(request, username, format=None):
+    """
+        GET: API endpoint that return a users single top rated review and wine info for the wine reviewed
+        /api/reviews/username/{username}?top={top}
+        """
+
+    if request.method == "GET":
+        top = request.GET.get('top', "1")
+        top = int(top)
+        data = []
+        with connection.cursor() as cursor:
+            cursor.execute("select * from reviews r, wines w where r.wid=w.wid and r.username=%s order by rating desc limit %s", [username, top])
+            col_names = [desc[0] for desc in cursor.description]
+            import os
+            while True:
+                row = cursor.fetchone()
+                if row is None:
+                    break
+                else:
+                    row_dict = dict(zip(col_names, row))
+                    if os.path.exists(settings.BASE_DIR + '/image/wid' + str(row_dict['wid'])):
+                        row_dict.update(
+                            {'image1': request.META['HTTP_HOST'] + '/static' + '/wid' + str(
+                                row_dict['wid']) + '/' + '0.jpg'})
+                        row_dict.update(
+                            {'image2': request.META['HTTP_HOST'] + '/static' + '/wid' + str(
+                                row_dict['wid']) + '/' + '1.jpg'})
+                    else:
+                        row_dict.update(
+                            {'image1': request.META['HTTP_HOST'] + '/static' + '/wid' + str(1) + '/' + '0.jpg'})
+                data.append(row_dict)
+        return Response({'data': data})
 
 
 @api_view(['DELETE', 'PUT'])

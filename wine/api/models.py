@@ -52,6 +52,22 @@ class Reviews(models.Model):
         db_table = 'reviews'
 
 
+class ReviewAndWineInfo(models.Model):
+    rid = models.AutoField(primary_key=True)
+    description = models.CharField(max_length=511)
+    rating = models.IntegerField()
+    wid = models.IntegerField()
+    name = models.CharField(max_length=255, null=True)
+    winery = models.CharField(max_length=255, null=True)
+    year = models.IntegerField(null=True)
+    variety = models.CharField(max_length=255, null=True)
+    price = models.FloatField(null=True)
+    designation = models.CharField(max_length=255, null=True)
+    locid = models.IntegerField(null=True)
+
+    class Meta:
+        db_table = 'reviews'
+
 
 class Wines(models.Model):
     wid = models.AutoField(primary_key=True)
