@@ -151,6 +151,11 @@ class PagesNavbar extends React.Component {
                 </NavLink>
                 </NavItem>
                 <NavItem className="p-0">
+                <NavLink tag={Link} to="wine-detail">
+                  Wine Detail
+                </NavLink>
+                </NavItem>
+                <NavItem className="p-0">
                 <NavLink tag={Link} to="profile-page">
                   {this.context.username}
                 </NavLink>

@@ -9,6 +9,7 @@ import WineContext from "./views/Context/wine-context"
 import RegisterPage from "views/WinePages/RegisterPage.jsx";
 import ProfilePage from "views/WinePages/ProfilePage.jsx";
 import WineTables from "views/WinePages/WineTables.jsx";
+import WineDetails from "views/WinePages/WineDetails.jsx";
 
 class App extends React.Component {
     constructor(props) {
@@ -51,6 +52,10 @@ render(){
                 <Route
                         path="/welcome/tables"
                         render={props => <WineTables {...props} />}
+                /> 
+                 <Route
+                        path="/welcome/wine-detail"
+                        render={props => <WineDetails {...props} />}
                 /> 
                 <Redirect to="/welcome/register-page"/>
                 </Switch>
