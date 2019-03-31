@@ -1,6 +1,7 @@
 import React from "react";
 import "assets/scss/blk-design-system-react.scss";
 import "assets/css/nucleo-icons.css";
+import WineContext from "../Context/wine-context"
 import ExamplesNavbar from "./ExamplesNavbar";
 
 import {
@@ -17,6 +18,7 @@ import {
 } from "reactstrap";
 
 class WineDetails extends React.Component {
+    static contextType = WineContext;
     constructor(props) {
         super(props);
         this.state = {

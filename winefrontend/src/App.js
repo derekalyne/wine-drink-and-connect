@@ -21,6 +21,8 @@ class App extends React.Component {
     }
 
 updateWid = id =>{
+    console.log("hahahahaasdasd")
+
     this.setState({wid:id});
 }
 

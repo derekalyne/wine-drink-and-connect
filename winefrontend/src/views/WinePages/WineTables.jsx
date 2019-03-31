@@ -1,5 +1,6 @@
 import React from "react";
 import ExamplesNavbar from "./ExamplesNavbar";
+import WineContext from "../Context/wine-context";
 import {
     Button,
     Label,
@@ -16,6 +17,7 @@ import {
 } from "reactstrap";
 
 class WineTables extends React.Component {
+    static contextType = WineContext;
     constructor(props) {
         super(props);
         this.state = {
@@ -63,7 +65,7 @@ class WineTables extends React.Component {
         var wines = this.state.tableData.data.map(o =>
 
             <tr key = {o.wid}>
-                <td width="25%">{o.name}</td>
+                <td width="25%" onClick={()=>this.context.updateWid(o.wid)} >{o.name}</td>
                 <td width="25%">{o.winery}</td>
                 {/*<td>{o.country}</td>*/}
                 <td width="10%">{o.year}</td>
