@@ -41,6 +41,30 @@ class WineTables extends React.Component {
 
     }
 
+    updatePage = (pageprev_new, page_new, pagenext_new) => {
+        this.setState({pageprev: pageprev_new, page:page_new, pagenext:pagenext_new});
+        return this.fetchData_page(page_new);
+    };
+
+    // this fetchdata is called when you change the page number
+    fetchData_page = (page_new) => {
+
+        var url = `http://sp19-cs411-46.cs.illinois.edu:8000/api/wines/?page=&winery=${this.state.winery}&year_gt=${this.state.wineYearl}&year_lt=${this.state.wineYearh}&variety&price_gt=${this.state.pricel}&price_lt=${this.state.priceh}&designation&name=${this.state.winesel}&page=${page_new}`;
+        fetch(url,
+            {
+                method: "GET",
+            }).then( (e) => {
+            console.log(e);
+            return e.json()
+        })
+            .catch( (e) => { return console.error("Error:", e) })
+            .then(e => {
+                this.setState({ tableData: e });
+                return console.log("Success:", e)
+            });
+    };
+
+    // this fetchdata is called when you first load/update the page
     fetchData = () => {
 
         var url = `http://sp19-cs411-46.cs.illinois.edu:8000/api/wines/?page=&winery=${this.state.winery}&year_gt=${this.state.wineYearl}&year_lt=${this.state.wineYearh}&variety&price_gt=${this.state.pricel}&price_lt=${this.state.priceh}&designation&name=${this.state.winesel}&page=${this.state.page}`;
@@ -64,13 +88,13 @@ class WineTables extends React.Component {
 
         var wines = this.state.tableData.data.map(o =>
 
-            <tr key = {o.wid}>
+            <tr key = {o.wid} align='center'>
                 <td width="25%" onClick={()=>this.context.updateWid(o.wid)} >{o.name}</td>
                 <td width="25%">{o.winery}</td>
                 {/*<td>{o.country}</td>*/}
                 <td width="10%">{o.year}</td>
                 <td width="10%">{o.price}</td>
-                <img width="100%" src={`http://${o.image1}`}/>
+                <img height='125px' src={`http://${o.image1}`}/>
             </tr>
         );
 
@@ -153,12 +177,12 @@ class WineTables extends React.Component {
                     </div>
 
                     {/* padding between top search bar and result*/}
-                    <div style={{margin: 20}}></div>
+                    <div style={{margin: 20}}> </div>
 
                     {/*result of query*/}
-                    <div className='container-fluid'>
-                        <table>
-                            <tr>
+                    <div className='container-fluid' align='center'>
+                        <table align='center'>
+                            <tr align='center'>
                                 <th width="25%"> Name</th>
                                 <th width="25%"> Winery</th>
                                 <th width="10%"> Year</th>
@@ -169,36 +193,18 @@ class WineTables extends React.Component {
                         </table>
                     </div>
 
-                    {/*now we want to display pagination*/}
-                    <div style={{margin: 20}} className='section section-basic' >
+                    <div style={{margin: 20}}> </div>
 
-                        <div className='container-fluid' >
-                            <Form className='pagination'>
+                    <div style={{margin: 20}} className='section section-basic' align="center" >
+                        <p>Choose Page:</p>
+                        <ButtonGroup>
 
-                                <FormGroup controlId='wineQuery'>
-                                    <Label>Page:</Label>
-                                    <Input defaultValue=""
-                                           placeholder="enter a number"
-                                           type="text"
-                                           name='currPage'
-                                           value={this.state.page}
-                                           onChange={e => this.setState({page: e.target.value})} />
-                                </FormGroup>
-
-                            </Form>
-                            <Button type='button' onClick={ () => this.fetchData()}>Submit</Button>
-                            {/*<ButtonGroup>*/}
-
-                                {/*<Button onClick={this.setState({pageprev: this.state.page}).then(() => this.fetchData())}>{this.state.pageprev}</Button>*/}
-                                {/*<Button onClick={ () => this.fetchData()}*/}
-                                        {/*value={this.state.page}>{this.state.page}</Button>*/}
-                                {/*<Button onClick={ () => this.fetchData()} >{this.state.pagenext}</Button>*/}
-                            {/*</ButtonGroup>*/}
-                        </div>
+                            <Button onClick={ () => this.updatePage((this.state.pageprev - 1), (this.state.pageprev), (this.state.page))} value={this.state.pageprev}>{this.state.pageprev}</Button>
+                            <Button onClick={ () => this.updatePage((this.state.pageprev - 1), (this.state.pageprev), (this.state.page))} value={this.state.page}>{this.state.page}</Button>
+                            <Button onClick={ () => this.updatePage((this.state.page), (this.state.page + 1), (this.state.pagenext + 1))} value={this.state.pagenext}>{this.state.pagenext}</Button>
+                        </ButtonGroup>
                     </div>
                 </div>
-
-
             </>
 
         );
