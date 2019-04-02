@@ -1,5 +1,5 @@
-from .serializers import DrinkersSerializer, LocationsSerializer,ReviewsSerializer,WinesSerializer,WineLocSerializer,ReviewAndWineInfoSerializer
-from .models import Drinkers,Locations,Reviews,Wines,WineLoc,ReviewAndWineInfo
+from .serializers import DrinkersSerializer, LocationsSerializer,ReviewsSerializer,WinesSerializer,WineLocSerializer
+from .models import Drinkers,Locations,Reviews,Wines,WineLoc
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -133,7 +133,7 @@ def review_list(request, wid, format=None):
         return Response({'data': serializer.data, 'count': paginator.count, 'numpages': paginator.num_pages})
     elif request.method == "POST":
         serializer = ReviewsSerializer(data=request.data)
-        serializer.initial_data["wid"] = wid
+        # serializer.initial_data["wid"] = wid
         if serializer.is_valid():
             review_obj = serializer.data
             with connection.cursor() as cursor:
