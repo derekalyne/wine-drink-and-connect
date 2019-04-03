@@ -16,18 +16,15 @@ class App extends React.Component {
       super(props);
       this.state = {
         wid:'',
-        username:'test',
+        username:'Not Logged In',
       };   
     }
 
 updateWid = id =>{
-    console.log("hahahahaasdasd")
-
     this.setState({wid:id});
 }
 
 updateUsername = (UN) =>{
-    console.log("hahahaha")
     this.setState({
         username:UN,
     })}
