@@ -75,6 +75,19 @@ html {
 @-ms-viewport {
   width: device-width; }
 
+
+  .deletebtn {
+    background-color: #f4511e;
+    border: none;
+    color: white;
+    text-align: center;
+    margin: 4px 2px;
+    opacity: 0.6;
+    transition: 0.3s;
+  }
+  
+  .deletebtn:hover {opacity: 1}
+
 article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
   display: block; }
 

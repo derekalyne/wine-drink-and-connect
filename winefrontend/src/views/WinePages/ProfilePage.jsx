@@ -83,9 +83,29 @@ class ProfilePage extends React.Component {
       name:'',
       password:'',
       gender:'',
-      age:''
+      age:'',
+      reviews:[],
+      update_flg:false
     };
   }
+
+
+  getReviews = () => {
+    const url = `http://sp19-cs411-46.cs.illinois.edu:8000/api/reviews/username/` + this.context.username + `?top=10`;
+    fetch(url, {method: "GET",})
+        .then((e) => {
+            return e.json()
+        }).catch((e) => {
+            return console.error("Error:", e)
+        }).then((e) => {
+            let reviews = e.data;
+            if (reviews == null) {
+                throw "Error in getting reviews for this wine"
+            }
+            this.setState({reviews: reviews});
+            console.log("Success:", this.state.reviews);
+        })
+};
 
   UpdateUserInfo = () =>{
     var url = `http://sp19-cs411-46.cs.illinois.edu:8000/api/drinkers/${this.context.username}`;
@@ -134,9 +154,59 @@ class ProfilePage extends React.Component {
   }
 
 
+  updateReview = (index) => {
+    var reviewObj = this.state.reviews[index]
+    if (reviewObj == null || reviewObj.rating == null || reviewObj.description == null || reviewObj.rid == null) {
+        console.log("ERROR!");
+        return;
+    }
+
+    let formData  = new FormData();
+    formData.append("rating",reviewObj.rating);
+    formData.append("description",reviewObj.description);
+    formData.append("username", reviewObj.username);
+    formData.append("wid", reviewObj.wid);
+    formData.append("rid", reviewObj.rid);
+
+    const url = `http://sp19-cs411-46.cs.illinois.edu:8000/api/reviews/rid/`+ reviewObj.rid;
+    fetch(url, {method: "PUT",
+        body: formData,
+        headers: {
+            'X-CSRFToken': csrftoken
+        }})
+        .then((e) => {
+            if (e.status == 200) {
+                console.log("Successfully updated review");
+                this.getReviews();
+            } else {
+                console.log("Error in updating review");
+            }
+        })
+};
+
+deleteReview = (rid) => {
+    if (rid == null) {
+        console.log("ERROR!");
+        return;
+    }
+    const url = `http://sp19-cs411-46.cs.illinois.edu:8000/api/reviews/rid/`+ rid;
+    fetch(url, {method: "DELETE",
+        headers: {
+            'X-CSRFToken': csrftoken
+        }})
+        .then((e) => {
+            if (e.status == 200) {
+                console.log("Successfully deleted review");
+                this.getReviews();
+            } else {
+                console.log("Error in deleting review");
+            }
+        })
+};
 
   componentDidMount() {
-    this.GetUserInfo()
+    this.GetUserInfo();
+    this.getReviews()
     if (navigator.platform.indexOf("Win") > -1) {
       document.documentElement.className += " perfect-scrollbar-on";
       document.documentElement.classList.remove("perfect-scrollbar-off");
@@ -161,7 +231,118 @@ class ProfilePage extends React.Component {
       [stateName]: index
     });
   };
+
+
+
   render() {
+
+    const{reviews} = this.state;
+    var reviewsList = reviews.map((review,index) =>
+    {
+      if(this.state.update_flg)
+        return(
+      <div className="section" key = {review.rid}>
+      <Container>
+        <label onClick={()=>{this.deleteReview(review.rid); this.getReviews()}} style = {{cursor: "pointer"}} >X</label>
+        <Row className="justify-content-between">
+          <Col>
+          <img
+                        alt="..."
+                        className="img-center img-fluid rounded-circle"
+                        style = {{height:"300px",marginTop:"30px"}}
+                        src={`http://${review.image1}`}
+          />
+          </Col>
+          <Col md="5">
+          
+            <p style = {{fontSize:"large",marginTop:"50px",textAlign:"center"}}>
+             {review.description}
+            </p>
+            
+          </Col>
+          <Col md="5">
+            <h1 className="profile-title text-left">{review.name}</h1>
+            <h5 className="text-on-back" style = {{fontSize:"200px"}}>{review.rating/10}</h5>
+          </Col>
+        </Row>
+        <Row>
+          <Col  md="5">
+          <Input value={review.description}
+             onChange={e =>{ 
+               let reviewsCopy = JSON.parse(JSON.stringify(this.state.reviews))
+               reviewsCopy[index].description = e.target.value
+              this.setState({
+                reviews:reviewsCopy 
+               })}} />
+          </Col>
+          <Col  md="5"> 
+          <Input value={review.rating}
+            type = "range"
+             onChange={e =>{ 
+               let reviewsCopy = JSON.parse(JSON.stringify(this.state.reviews))
+               reviewsCopy[index].rating = e.target.value
+              this.setState({
+                reviews:reviewsCopy 
+               })}} />
+          </Col>
+          <Col>
+          <Button
+                          className="btn-round float-right"
+                          type="button"
+                          onClick = {()=>{this.updateReview(index); this.getReviews(); this.setState({update_flg:false})}}
+                        >
+                          Submit
+                        </Button>
+          </Col>
+         
+
+        </Row>
+        <label onClick={() => this.setState({update_flg:true})}
+         style = {{cursor: "pointer", position: "relative", left: "100%"}} >Update this review</label>
+      </Container>
+      </div>
+        );
+      
+      else 
+        return(
+          <div className="section" key = {review.rid}>
+          <Container>
+            <label onClick={()=>{this.deleteReview(review.rid); this.getReviews()}} style = {{cursor: "pointer"}} >X</label>
+            <Row className="justify-content-between">
+              <Col>
+              <img
+                            alt="..."
+                            className="img-center img-fluid rounded-circle"
+                            style = {{height:"300px",marginTop:"30px"}}
+                            src={`http://${review.image1}`}
+              />
+              </Col>
+              <Col md="5">
+              
+                <p style = {{fontSize:"large",marginTop:"50px",textAlign:"center"}}>
+                 {review.description}
+                </p>
+                
+              </Col>
+              <Col md="5">
+                <h1 className="profile-title text-left">{review.name}</h1>
+                <h5 className="text-on-back" style = {{fontSize:"200px"}}>{review.rating/10}</h5>
+              </Col>
+            </Row>
+            <label onClick={() => this.setState({update_flg:true})}
+             style = {{cursor: "pointer", position: "relative", left: "100%"}} >Update this review</label>
+          </Container>
+          </div>
+        );
+
+      });
+    
+
+    var wines = reviews.map(review => 
+        <tr>
+          <td>{review.name}</td>
+        </tr>);
+
     return (
       <>
         <ExamplesNavbar />
@@ -219,7 +400,7 @@ class ProfilePage extends React.Component {
                             onClick={e => this.toggleTabs(e, "tabs", 3)}
                             href="#pablo"
                           >
-                            Favorite Wine
+                            Favorite Wines
                           </NavLink>
                         </NavItem>
                       </Nav>
@@ -255,15 +436,7 @@ class ProfilePage extends React.Component {
                               </tr>
                             </thead>
                             <tbody>
-                              <tr>
-                                <td>Point Noir</td>
-                              </tr>
-                              <tr>
-                                <td>Rose</td>
-                              </tr>
-                              <tr>
-                                <td>Cola</td>
-                              </tr>
+                             {wines}
                             </tbody>
                           </Table>
                         </TabPane>
@@ -274,25 +447,7 @@ class ProfilePage extends React.Component {
               </Row>
             </Container>
           </div>
-          <div className="section">
-            <Container>
-              <Row className="justify-content-between">
-                <Col md="6">
-                  <Row className="justify-content-between align-items-center">
-                    <UncontrolledCarousel items={carouselItems} />
-                  </Row>
-                </Col>
-                <Col md="5">
-                  <h1 className="profile-title text-left">Placeholder for user's favorite wine review</h1>
-                  <h5 className="text-on-back">02</h5>
-                  <p className="profile-description text-left">
-                    This wine is so good I want to cry. Shut up and buy me some more.
-                  </p>
-                 
-                </Col>
-              </Row>
-            </Container>
-          </div>
+          {reviewsList}
           <section className="section">
             <Container>
               <Row>

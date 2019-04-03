@@ -139,55 +139,7 @@ class WineDetails extends React.Component {
             })
     };
 
-    updateReview = (reviewObj) => {
-        if (reviewObj == null || reviewObj.rating == null || reviewObj.description == null || reviewObj.rid == null) {
-            console.log("ERROR!");
-            return;
-        }
-
-        let formData  = new FormData();
-        formData.append("rating",reviewObj.rating);
-        formData.append("description",reviewObj.description);
-        formData.append("username", this.state.username);
-        formData.append("wid", this.state.wid);
-        formData.append("rid", reviewObj.rid);
-
-        const url = `http://sp19-cs411-46.cs.illinois.edu:8000/api/reviews/rid/`+ reviewObj.rid;
-        fetch(url, {method: "PUT",
-            body: formData,
-            headers: {
-                'X-CSRFToken': csrftoken
-            }})
-            .then((e) => {
-                if (e.status == 200) {
-                    console.log("Successfully updated review");
-                    this.getReviews();
-                } else {
-                    console.log("Error in updating review");
-                }
-            })
-    };
-
-    deleteReview = (rid) => {
-        if (rid == null) {
-            console.log("ERROR!");
-            return;
-        }
-        const url = `http://sp19-cs411-46.cs.illinois.edu:8000/api/reviews/rid/`+ rid;
-        fetch(url, {method: "DELETE",
-            headers: {
-                'X-CSRFToken': csrftoken
-            }})
-            .then((e) => {
-                console.log(e.json());
-                if (e.status == 200) {
-                    console.log("Successfully deleted review");
-                    this.getReviews();
-                } else {
-                    console.log("Error in deleting review");
-                }
-            })
-    };
+    
 
  
     componentDidMount() {
