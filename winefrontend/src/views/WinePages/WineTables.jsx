@@ -1,5 +1,6 @@
 import React from "react";
 import ExamplesNavbar from "./ExamplesNavbar";
+import { Link } from "react-router-dom";
 import WineContext from "../Context/wine-context";
 import {
     Button,
@@ -13,6 +14,7 @@ import {
     Container,
     Row,
     Col,
+    NavLink,
     ButtonGroup
 } from "reactstrap";
 
@@ -89,7 +91,9 @@ class WineTables extends React.Component {
         var wines = this.state.tableData.data.map(o =>
 
             <tr key = {o.wid} align='center'>
+                <NavLink tag={Link} to="wine-detail">
                 <td width="25%" onClick={()=>this.context.updateWid(o.wid)} >{o.name}</td>
+                </NavLink>
                 <td width="25%">{o.winery}</td>
                 {/*<td>{o.country}</td>*/}
                 <td width="10%">{o.year}</td>

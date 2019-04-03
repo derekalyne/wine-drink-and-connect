@@ -115,7 +115,7 @@ class WineDetails extends React.Component {
             console.log("ERROR!");
             return;
         }
-        const url = `http://127.0.0.1:8000/api/reviews/wid/`+ this.context.wid;
+        const url = `http://sp19-cs411-46.cs.illinois.edu:8000/api/reviews/wid/`+ this.context.wid;
 
         let formData  = new FormData();
         formData.append("rating",reviewObj.rating);
