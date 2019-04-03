@@ -49,6 +49,7 @@ const csrftoken = getCookie('csrftoken');
 let ps = null;
 
 class WineDetails extends React.Component {
+    static contextType = WineContext;
     constructor(props) {
         super(props);
         this.state = {
@@ -70,14 +71,12 @@ class WineDetails extends React.Component {
                 description:""
             }],
             submitRating:50,
-            submitDescription:'',
-            wid: 316,
-            username: "test",
+            submitDescription:''          
         };
     }
   
     getWineData = () => {
-        const url = `http://sp19-cs411-46.cs.illinois.edu:8000/api/wines/?wid=` + this.state.wid;
+        const url = `http://sp19-cs411-46.cs.illinois.edu:8000/api/wines/?wid=` + this.context.wid;
         fetch(url,
             {method: "GET",})
                 .then((e) => {
@@ -95,7 +94,7 @@ class WineDetails extends React.Component {
     };
 
     getReviews = () => {
-        const url = `http://sp19-cs411-46.cs.illinois.edu:8000/api/reviews/wid/` + this.state.wid;
+        const url = `http://sp19-cs411-46.cs.illinois.edu:8000/api/reviews/wid/` + this.context.wid;
         fetch(url, {method: "GET",})
             .then((e) => {
                 return e.json()
@@ -116,13 +115,14 @@ class WineDetails extends React.Component {
             console.log("ERROR!");
             return;
         }
-        const url = `http://sp19-cs411-46.cs.illinois.edu:8000/api/reviews/wid/`+ this.state.wid;
+        const url = `http://127.0.0.1:8000/api/reviews/wid/`+ this.context.wid;
 
         let formData  = new FormData();
         formData.append("rating",reviewObj.rating);
+        formData.append("wid",this.context.wid);
         formData.append("description",reviewObj.description);
-        formData.append("username", this.state.username);
-
+        formData.append("username", this.context.username);
+        console.log(formData)
         fetch(url, {method: "POST",
             body: formData,
             headers: {
@@ -139,7 +139,14 @@ class WineDetails extends React.Component {
             })
     };
 
-    
+    toggleTabs = (e, stateName, index) => {
+      e.preventDefault();
+      this.setState({
+        [stateName]: index
+      });
+    };
+
+
 
  
     componentDidMount() {
@@ -165,12 +172,8 @@ class WineDetails extends React.Component {
         }
         document.body.classList.toggle("profile-page");
       }
-      toggleTabs = (e, stateName, index) => {
-        e.preventDefault();
-        this.setState({
-          [stateName]: index
-        });
-      };
+      
+ 
 
     render() {
         
