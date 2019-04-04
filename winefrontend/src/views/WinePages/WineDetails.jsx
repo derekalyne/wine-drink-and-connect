@@ -1,6 +1,4 @@
 import React from "react";
-import "assets/scss/blk-design-system-react.scss";
-import "assets/css/nucleo-icons.css";
 import ExamplesNavbar from "./ExamplesNavbar";
 import classnames from "classnames";
 // javascript plugin used to create scrollbars on windows

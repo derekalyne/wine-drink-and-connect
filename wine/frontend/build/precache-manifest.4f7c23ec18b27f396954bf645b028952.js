@@ -4,56 +4,60 @@ self.__precacheManifest = [
     "url": "/creativetimofficial/blk-design-system-react/static/media/square2.6619b979.png"
   },
   {
-    "revision": "c90b8477eb3e26bef0dd",
-    "url": "/creativetimofficial/blk-design-system-react/static/css/main.cf21d719.chunk.css"
+    "revision": "8b4e1a074b9164875b27",
+    "url": "/creativetimofficial/blk-design-system-react/static/css/main.4149c997.chunk.css"
   },
   {
     "revision": "68a6a9cf8adbcd2b72a8",
     "url": "/creativetimofficial/blk-design-system-react/static/js/runtime~main.930448fb.js"
   },
   {
-    "revision": "d8fab4b5f20539075f22",
-    "url": "/creativetimofficial/blk-design-system-react/static/js/2.47ced41d.chunk.js"
+    "revision": "29739aa5946af2b902e1",
+    "url": "/creativetimofficial/blk-design-system-react/static/js/2.c9cf3630.chunk.js"
+  },
+  {
+    "revision": "b81dabc0bc6ca52fce921e3a928d5e0f",
+    "url": "/creativetimofficial/blk-design-system-react/static/media/dots.b81dabc0.png"
+  },
+  {
+    "revision": "e37326c7e0fd9826c1a35b231340f58b",
+    "url": "/creativetimofficial/blk-design-system-react/static/media/path4.e37326c7.png"
   },
   {
     "revision": "06e014f75c25e2951af82b8a2c511eee",
     "url": "/creativetimofficial/blk-design-system-react/static/media/wine4.06e014f7.jpg"
   },
   {
-    "revision": "b17a118e13e53558658b681a0ebdad82",
-    "url": "/creativetimofficial/blk-design-system-react/static/media/nucleo.b17a118e.ttf"
-  },
-  {
     "revision": "f0b489a5dbbff08833d21024f9fcbd4e",
     "url": "/creativetimofficial/blk-design-system-react/static/media/nucleo.f0b489a5.woff"
   },
   {
-    "revision": "03ef1918e505c3e3471f9369ef7a638f",
-    "url": "/creativetimofficial/blk-design-system-react/static/media/nucleo.03ef1918.eot"
+    "revision": "b17a118e13e53558658b681a0ebdad82",
+    "url": "/creativetimofficial/blk-design-system-react/static/media/nucleo.b17a118e.ttf"
   },
   {
     "revision": "5987dd12fea78ce5f97ae601b08ec03c",
     "url": "/creativetimofficial/blk-design-system-react/static/media/nucleo.5987dd12.woff2"
   },
   {
-    "revision": "ca25707397fcc982d7dc1f82555f09a0",
-    "url": "/creativetimofficial/blk-design-system-react/static/media/square1.ca257073.png"
+    "revision": "03ef1918e505c3e3471f9369ef7a638f",
+    "url": "/creativetimofficial/blk-design-system-react/static/media/nucleo.03ef1918.eot"
+  },
+  {
+    "revision": "8b4e1a074b9164875b27",
+    "url": "/creativetimofficial/blk-design-system-react/static/js/main.b08238fe.chunk.js"
   },
   {
     "revision": "23fa76237f0066f4ffd8f20e77449887",
     "url": "/creativetimofficial/blk-design-system-react/static/media/square3.23fa7623.png"
   },
   {
-    "revision": "c90b8477eb3e26bef0dd",
-    "url": "/creativetimofficial/blk-design-system-react/static/js/main.31f240ea.chunk.js"
+    "revision": "ca25707397fcc982d7dc1f82555f09a0",
+    "url": "/creativetimofficial/blk-design-system-react/static/media/square1.ca257073.png"
   },
   {
     "revision": "8fdf9ee20db40e5d1cf778bf99486cb7",
     "url": "/creativetimofficial/blk-design-system-react/static/media/square4.8fdf9ee2.png"
-  },
-  {
-    "revision": "b81dabc0bc6ca52fce921e3a928d5e0f",
-    "url": "/creativetimofficial/blk-design-system-react/static/media/dots.b81dabc0.png"
   },
   {
     "revision": "ff004a0e5de54ba9dbd8583fa7e1b3f5",
@@ -76,15 +80,11 @@ self.__precacheManifest = [
     "url": "/creativetimofficial/blk-design-system-react/static/media/mark-finn.3a749d18.jpg"
   },
   {
-    "revision": "e37326c7e0fd9826c1a35b231340f58b",
-    "url": "/creativetimofficial/blk-design-system-react/static/media/path4.e37326c7.png"
-  },
-  {
     "revision": "fc181e7229cf8eddb74296931ab09067",
     "url": "/creativetimofficial/blk-design-system-react/static/media/wine3.fc181e72.jpg"
   },
   {
-    "revision": "7a02a3d1752f6c99a76648e575cd72b9",
+    "revision": "9e026e46b247a55ee98e844b1fa7020e",
     "url": "/creativetimofficial/blk-design-system-react/index.html"
   }
 ];
