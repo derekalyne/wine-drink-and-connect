@@ -243,7 +243,15 @@ deleteReview = (rid) => {
         return(
       <div className="section" key = {review.rid}>
       <Container>
-        <label onClick={()=>{this.deleteReview(review.rid); this.getReviews()}} style = {{cursor: "pointer"}} >X</label>
+        <label onClick={()=>{this.deleteReview(review.rid); this.getReviews()}}
+         style = {{
+         cursor: "pointer",        
+         width: "50px",
+         height: "50px",
+         borderStyle: "solid",
+         textAlign: "center",
+         fontSize: "30px"}} >X</label>
+         
         <Row className="justify-content-between">
           <Col>
           <img
@@ -307,7 +315,12 @@ deleteReview = (rid) => {
         return(
           <div className="section" key = {review.rid}>
           <Container>
-            <label onClick={()=>{this.deleteReview(review.rid); this.getReviews()}} style = {{cursor: "pointer"}} >X</label>
+            <label onClick={()=>{this.deleteReview(review.rid); this.getReviews()}} style = {{cursor: "pointer",        
+         width: "50px",
+         height: "50px",
+         borderStyle: "solid",
+         textAlign: "center",
+         fontSize: "30px"}} >X</label>
             <Row className="justify-content-between">
               <Col>
               <img
@@ -366,7 +379,7 @@ deleteReview = (rid) => {
                  
                 </Col>
                 <Col className="ml-auto mr-auto" lg="4" md="6">
-                  <Card className="card-coin card-plain">
+                  <Card className="card-coin card-plain" style = {{background:"#344675d9"}}>
                     <CardHeader>
                       <img
                         alt="..."
@@ -375,7 +388,7 @@ deleteReview = (rid) => {
                       />
                       <h4 className="title">Personal Profile</h4>
                     </CardHeader>
-                    <CardBody>
+                    <CardBody >
                       <Nav
                         className="nav-tabs-primary justify-content-center"
                         tabs

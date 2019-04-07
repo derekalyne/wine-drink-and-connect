@@ -1,10 +1,10 @@
 self.__precacheManifest = [
   {
-    "revision": "6619b9792d7d108bb589b51bbd560278",
-    "url": "/creativetimofficial/blk-design-system-react/static/media/square2.6619b979.png"
+    "revision": "23fa76237f0066f4ffd8f20e77449887",
+    "url": "/creativetimofficial/blk-design-system-react/static/media/square3.23fa7623.png"
   },
   {
-    "revision": "8b4e1a074b9164875b27",
+    "revision": "dfcd26626e202253f4cd",
     "url": "/creativetimofficial/blk-design-system-react/static/css/main.4149c997.chunk.css"
   },
   {
@@ -28,14 +28,6 @@ self.__precacheManifest = [
     "url": "/creativetimofficial/blk-design-system-react/static/media/wine4.06e014f7.jpg"
   },
   {
-    "revision": "f0b489a5dbbff08833d21024f9fcbd4e",
-    "url": "/creativetimofficial/blk-design-system-react/static/media/nucleo.f0b489a5.woff"
-  },
-  {
-    "revision": "b17a118e13e53558658b681a0ebdad82",
-    "url": "/creativetimofficial/blk-design-system-react/static/media/nucleo.b17a118e.ttf"
-  },
-  {
     "revision": "5987dd12fea78ce5f97ae601b08ec03c",
     "url": "/creativetimofficial/blk-design-system-react/static/media/nucleo.5987dd12.woff2"
   },
@@ -44,12 +36,20 @@ self.__precacheManifest = [
     "url": "/creativetimofficial/blk-design-system-react/static/media/nucleo.03ef1918.eot"
   },
   {
-    "revision": "8b4e1a074b9164875b27",
-    "url": "/creativetimofficial/blk-design-system-react/static/js/main.b08238fe.chunk.js"
+    "revision": "f0b489a5dbbff08833d21024f9fcbd4e",
+    "url": "/creativetimofficial/blk-design-system-react/static/media/nucleo.f0b489a5.woff"
   },
   {
-    "revision": "23fa76237f0066f4ffd8f20e77449887",
-    "url": "/creativetimofficial/blk-design-system-react/static/media/square3.23fa7623.png"
+    "revision": "b17a118e13e53558658b681a0ebdad82",
+    "url": "/creativetimofficial/blk-design-system-react/static/media/nucleo.b17a118e.ttf"
+  },
+  {
+    "revision": "dfcd26626e202253f4cd",
+    "url": "/creativetimofficial/blk-design-system-react/static/js/main.06eea0d7.chunk.js"
+  },
+  {
+    "revision": "6619b9792d7d108bb589b51bbd560278",
+    "url": "/creativetimofficial/blk-design-system-react/static/media/square2.6619b979.png"
   },
   {
     "revision": "ca25707397fcc982d7dc1f82555f09a0",
@@ -84,7 +84,7 @@ self.__precacheManifest = [
     "url": "/creativetimofficial/blk-design-system-react/static/media/wine3.fc181e72.jpg"
   },
   {
-    "revision": "9e026e46b247a55ee98e844b1fa7020e",
+    "revision": "2e66663f7037a8978c82f382da01b879",
     "url": "/creativetimofficial/blk-design-system-react/index.html"
   }
 ];
