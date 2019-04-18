@@ -4,6 +4,8 @@ import classnames from "classnames";
 import PerfectScrollbar from "perfect-scrollbar";
 import WineContext from "../Context/wine-context"
 
+import { VictoryPie, VictoryLabel, VictoryTooltip,VictoryChart,VictoryTheme,VictoryLine,VictoryLegend,VictoryScatter } from "victory"
+
 
 // reactstrap components
 import {
@@ -75,134 +77,138 @@ class ProfilePage extends React.Component {
     super(props);
     this.state = {
       tabs: 1,
-      userinfo:{
-        name:'',
-        age:'',
-        gender:''
+      userinfo: {
+        name: '',
+        age: '',
+        gender: ''
       },
-      name:'',
-      password:'',
-      gender:'',
-      age:'',
-      reviews:[],
-      update_flg:false
+      name: '',
+      password: '',
+      gender: '',
+      age: '',
+      reviews: [],
+      update_flg: false
     };
   }
 
 
   getReviews = () => {
     const url = `http://sp19-cs411-46.cs.illinois.edu:8000/api/reviews/username/` + this.context.username + `?top=10`;
-    fetch(url, {method: "GET",})
-        .then((e) => {
-            return e.json()
-        }).catch((e) => {
-            return console.error("Error:", e)
-        }).then((e) => {
-            let reviews = e.data;
-            if (reviews == null) {
-                throw "Error in getting reviews for this wine"
-            }
-            this.setState({reviews: reviews});
-            console.log("Success:", this.state.reviews);
-        })
-};
+    fetch(url, { method: "GET", })
+      .then((e) => {
+        return e.json()
+      }).catch((e) => {
+        return console.error("Error:", e)
+      }).then((e) => {
+        let reviews = e.data;
+        if (reviews == null) {
+          throw "Error in getting reviews for this wine"
+        }
+        this.setState({ reviews: reviews });
+        console.log("Success:", this.state.reviews);
+      })
+  };
 
-  UpdateUserInfo = () =>{
+  UpdateUserInfo = () => {
     var url = `http://sp19-cs411-46.cs.illinois.edu:8000/api/drinkers/${this.context.username}`;
-    var formData  = new FormData();
-    formData.append("username",this.context.username)
-    formData.append("name",this.state.name)
-    formData.append("password",this.state.password)
-    formData.append("gender",this.state.gender)
-    formData.append("password",this.state.password)
-    formData.append("age",this.state.age)
+    var formData = new FormData();
+    formData.append("username", this.context.username)
+    formData.append("name", this.state.name)
+    formData.append("password", this.state.password)
+    formData.append("gender", this.state.gender)
+    formData.append("password", this.state.password)
+    formData.append("age", this.state.age)
     fetch(url,
-        {
-            method: "PUT",
-            body: formData,
-            headers: {
-              'X-CSRFToken': csrftoken
-            },
-        }).then( (e) => {
-            console.log(e);
-            return e.json()
-        })
-        .catch( (e) => { return console.error("Error:", e) })
-        .then(e => {
-            this.setState({ message: "Success! You can now update your personal info!" });
-            this.GetUserInfo();
-            return console.log("Success:", e)
-        });
-      
+      {
+        method: "PUT",
+        body: formData,
+        headers: {
+          'X-CSRFToken': csrftoken
+        },
+      }).then((e) => {
+        console.log(e);
+        return e.json()
+      })
+      .catch((e) => { return console.error("Error:", e) })
+      .then(e => {
+        this.setState({ message: "Success! You can now update your personal info!" });
+        this.GetUserInfo();
+        return console.log("Success:", e)
+      });
+
   }
 
-  GetUserInfo = () =>{
+  GetUserInfo = () => {
     var url = `http://sp19-cs411-46.cs.illinois.edu:8000/api/drinkers/${this.context.username}`;
-  
+
     fetch(url,
-        {
-            method: "GET"
-        }).then( (e) => {
-            console.log(e);
-            return e.json()
-        })
-        .catch( (e) => { return console.error("Error:", e) })
-        .then(e => {
-            this.setState({ userinfo: e });
-            return console.log("Success:", e)
-        });
+      {
+        method: "GET"
+      }).then((e) => {
+        console.log(e);
+        return e.json()
+      })
+      .catch((e) => { return console.error("Error:", e) })
+      .then(e => {
+        this.setState({ userinfo: e });
+        return console.log("Success:", e)
+      });
   }
 
 
   updateReview = (index) => {
     var reviewObj = this.state.reviews[index]
     if (reviewObj == null || reviewObj.rating == null || reviewObj.description == null || reviewObj.rid == null) {
-        console.log("ERROR!");
-        return;
+      console.log("ERROR!");
+      return;
     }
 
-    let formData  = new FormData();
-    formData.append("rating",reviewObj.rating);
-    formData.append("description",reviewObj.description);
+    let formData = new FormData();
+    formData.append("rating", reviewObj.rating);
+    formData.append("description", reviewObj.description);
     formData.append("username", reviewObj.username);
     formData.append("wid", reviewObj.wid);
     formData.append("rid", reviewObj.rid);
 
-    const url = `http://sp19-cs411-46.cs.illinois.edu:8000/api/reviews/rid/`+ reviewObj.rid;
-    fetch(url, {method: "PUT",
-        body: formData,
-        headers: {
-            'X-CSRFToken': csrftoken
-        }})
-        .then((e) => {
-            if (e.status == 200) {
-                console.log("Successfully updated review");
-                this.getReviews();
-            } else {
-                console.log("Error in updating review");
-            }
-        })
-};
+    const url = `http://sp19-cs411-46.cs.illinois.edu:8000/api/reviews/rid/` + reviewObj.rid;
+    fetch(url, {
+      method: "PUT",
+      body: formData,
+      headers: {
+        'X-CSRFToken': csrftoken
+      }
+    })
+      .then((e) => {
+        if (e.status == 200) {
+          console.log("Successfully updated review");
+          this.getReviews();
+        } else {
+          console.log("Error in updating review");
+        }
+      })
+  };
 
-deleteReview = (rid) => {
+  deleteReview = (rid) => {
     if (rid == null) {
-        console.log("ERROR!");
-        return;
+      console.log("ERROR!");
+      return;
     }
-    const url = `http://sp19-cs411-46.cs.illinois.edu:8000/api/reviews/rid/`+ rid;
-    fetch(url, {method: "DELETE",
-        headers: {
-            'X-CSRFToken': csrftoken
-        }})
-        .then((e) => {
-            if (e.status == 200) {
-                console.log("Successfully deleted review");
-                this.getReviews();
-            } else {
-                console.log("Error in deleting review");
-            }
-        })
-};
+    const url = `http://sp19-cs411-46.cs.illinois.edu:8000/api/reviews/rid/` + rid;
+    fetch(url, {
+      method: "DELETE",
+      headers: {
+        'X-CSRFToken': csrftoken
+      }
+    })
+      .then((e) => {
+        if (e.status == 200) {
+          console.log("Successfully deleted review");
+          this.getReviews();
+        } else {
+          console.log("Error in deleting review");
+        }
+      })
+  };
 
   componentDidMount() {
     this.GetUserInfo();
@@ -236,125 +242,272 @@ deleteReview = (rid) => {
 
   render() {
 
-    const{reviews} = this.state;
-    var reviewsList = reviews.map((review,index) =>
-    {
-      if(this.state.update_flg)
-        return(
-      <div className="section" key = {review.rid}>
-      <Container>
-        <label onClick={()=>{this.deleteReview(review.rid); this.getReviews()}}
-         style = {{
-         cursor: "pointer",        
-         width: "50px",
-         height: "50px",
-         borderStyle: "solid",
-         textAlign: "center",
-         fontSize: "30px"}} >X</label>
-         
-        <Row className="justify-content-between">
-          <Col>
-          <img
-                        alt="..."
-                        className="img-center img-fluid rounded-circle"
-                        style = {{height:"300px",marginTop:"30px"}}
-                        src={`http://${review.image1}`}
-          />
-          </Col>
-          <Col md="5">
-          
-            <p style = {{fontSize:"large",marginTop:"50px",textAlign:"center"}}>
-             {review.description}
-            </p>
-            
-          </Col>
-          <Col md="5">
-            <h1 className="profile-title text-left">{review.name}</h1>
-            <h5 className="text-on-back" style = {{fontSize:"200px"}}>{review.rating/10}</h5>
-          </Col>
-        </Row>
-        <Row>
-          <Col  md="5">
-          <Input value={review.description}
-             onChange={e =>{ 
-               let reviewsCopy = JSON.parse(JSON.stringify(this.state.reviews))
-               reviewsCopy[index].description = e.target.value
-              this.setState({
-                reviews:reviewsCopy 
-               })}} />
-          </Col>
-          <Col  md="5"> 
-          <Input value={review.rating}
-            type = "range"
-             onChange={e =>{ 
-               let reviewsCopy = JSON.parse(JSON.stringify(this.state.reviews))
-               reviewsCopy[index].rating = e.target.value
-              this.setState({
-                reviews:reviewsCopy 
-               })}} />
-          </Col>
-          <Col>
-          <Button
-                          className="btn-round float-right"
-                          type="button"
-                          onClick = {()=>{this.updateReview(index); this.getReviews(); this.setState({update_flg:false})}}
-                        >
-                          Submit
-                        </Button>
-          </Col>
-         
+    const { reviews } = this.state;
 
-        </Row>
-        <label onClick={() => this.setState({update_flg:true})}
-         style = {{cursor: "pointer", position: "relative", left: "100%"}} >Update this review</label>
-      </Container>
-      </div>
-        );
-      
-      else 
-        return(
-          <div className="section" key = {review.rid}>
-          <Container>
-            <label onClick={()=>{this.deleteReview(review.rid); this.getReviews()}} style = {{cursor: "pointer",        
-         width: "50px",
-         height: "50px",
-         borderStyle: "solid",
-         textAlign: "center",
-         fontSize: "30px"}} >X</label>
-            <Row className="justify-content-between">
-              <Col>
-              <img
-                            alt="..."
-                            className="img-center img-fluid rounded-circle"
-                            style = {{height:"300px",marginTop:"30px"}}
-                            src={`http://${review.image1}`}
-              />
-              </Col>
-              <Col md="5">
-              
-                <p style = {{fontSize:"large",marginTop:"50px",textAlign:"center"}}>
-                 {review.description}
-                </p>
-                
-              </Col>
-              <Col md="5">
-                <h1 className="profile-title text-left">{review.name}</h1>
-                <h5 className="text-on-back" style = {{fontSize:"200px"}}>{review.rating/10}</h5>
-              </Col>
-            </Row>
-            <label onClick={() => this.setState({update_flg:true})}
-             style = {{cursor: "pointer", position: "relative", left: "100%"}} >Update this review</label>
-          </Container>
+    var winerydata = reviews.map(x => {
+      var data = { "x": x.winery || "Unknown", "y": reviews.filter(y => y.winery === x.winery).length / reviews.length }
+      return data
+    })
+
+    var varietydata = reviews.map(x => {
+      var data = { "x": x.variety || "Unknown", "y": reviews.filter(y => y.variety === x.variety).length / reviews.length }
+      return data
+    })
+
+    var designationdata = reviews.map(x => {
+      var data = { "x": x.designation || "Unknown", "y": reviews.filter(y => y.designation === x.designation).length / reviews.length }
+      return data
+    })
+
+
+    var priceLineChart = (
+      <svg width={1000} height={300} >
+        <VictoryChart
+          width={800} 
+          standalone={false}
+          scale={{ x: "time" }}
+        >
+          <VictoryLegend x={500} y={50}
+            title="Price vs Age"
+            centerTitle
+            orientation="horizontal"
+            gutter={20}
+            style={{ border: { stroke: "black" }, title: { fontSize: 20 } }}
+            data={[
+              { name: "x : Age", symbol: { fill: "tomato", type: "star" } },
+              { name: "y: Price", symbol: { fill: "orange" } }
+             
+            ]}
+          />
+          <VictoryLine
+            style={{
+              data: { stroke: "#c43a31" },
+              parent: { border: "1px solid #ccc" }
+            }}
+            x ={d=>new Date(d.year, 1, 1)}
+            y={d=>d.price || 100}
+            data={reviews}
+          />
+
+          <VictoryScatter
+              style={{ data: { fill: "#c43a31" } }}
+              size={7}
+              x ={d=>new Date(d.year, 1, 1)}
+              y={d=>d.price || 100}
+              labels={(d) => ` ${d.name} \n $${d.price}`}
+              labelComponent={
+                <VictoryTooltip
+                  style={{ fontSize: 10 }}
+                  orientation="right"
+                />
+              }
+              data={reviews}
+            />
+
+        </VictoryChart>
+
+      </svg>
+    )
+
+
+    var winerypieChart = (
+      <svg width={500} height={500} >
+        <VictoryPie
+          standalone={false}
+          width={400} height={400}
+          data={winerydata}
+          labels={(d) => ` ${d.x} \n     ${d.y * 100}%`}
+          labelComponent={
+            <VictoryTooltip
+              style={{ fontSize: 20 }}
+              orientation="right"
+            />
+          }
+          innerRadius={68} labelRadius={100}
+          style={{ labels: { fontSize: 20, fill: "white" } }}
+        />
+        <VictoryLabel
+          textAnchor="middle"
+          style={{ fontSize: 20, fill: "white" }}
+          x={200} y={200}
+          text="Winery"
+        />
+      </svg>
+    )
+
+    var varietypieChart = (
+      <svg width={500} height={500} >
+        <VictoryPie
+          standalone={false}
+          width={400} height={400}
+          data={varietydata}
+          innerRadius={68} labelRadius={100}
+          labels={(d) => ` ${d.x}  \n    ${d.y * 100}%`}
+          labelComponent={
+            <VictoryTooltip
+              style={{ fontSize: 20 }}
+              orientation="right"
+            />
+          }
+          style={{ labels: { fontSize: 20, fill: "white" } }}
+        />
+        <VictoryLabel
+          textAnchor="middle"
+          style={{ fontSize: 20, fill: "white" }}
+          x={200} y={200}
+          text="Variety"
+        />
+      </svg>
+    )
+
+
+    var designationpieChart = (
+      <svg width={500} height={500} >
+        <VictoryPie
+          standalone={false}
+          width={400} height={400}
+          data={designationdata}
+          labels={(d) => ` ${d.x}  \n    ${d.y * 100}%`}
+          labelComponent={
+            <VictoryTooltip
+              style={{ fontSize: 20 }}
+              orientation="right"
+            />
+          }
+          innerRadius={68} labelRadius={100}
+          style={{ labels: { fontSize: 20, fill: "white" } }}
+        />
+        <VictoryLabel
+          textAnchor="middle"
+          style={{ fontSize: 20, fill: "white" }}
+          x={200} y={200}
+          text="Designation"
+        />
+      </svg>
+    )
+
+    var reviewsList = reviews.map((review, index) => {
+      if (this.state.update_flg)
+        return (
+          <div className="section" key={review.rid}>
+            <Container>
+              <label onClick={() => { this.deleteReview(review.rid); this.getReviews() }}
+                style={{
+                  cursor: "pointer",
+                  width: "50px",
+                  height: "50px",
+                  borderStyle: "solid",
+                  textAlign: "center",
+                  fontSize: "30px"
+                }} >X</label>
+
+              <Row className="justify-content-between">
+                <Col>
+                  <img
+                    alt="..."
+                    className="img-center img-fluid rounded-circle"
+                    style={{ height: "300px", marginTop: "30px" }}
+                    src={`http://${review.image1}`}
+                  />
+                </Col>
+                <Col md="5">
+
+                  <p style={{ fontSize: "large", marginTop: "50px", textAlign: "center" }}>
+                    {review.description}
+                  </p>
+
+                </Col>
+                <Col md="5">
+                  <h1 className="profile-title text-left">{review.name}</h1>
+                  <h5 className="text-on-back" style={{ fontSize: "200px" }}>{review.rating / 10}</h5>
+                </Col>
+              </Row>
+              <Row>
+                <Col md="5">
+                  <Input value={review.description}
+                    onChange={e => {
+                      let reviewsCopy = JSON.parse(JSON.stringify(this.state.reviews))
+                      reviewsCopy[index].description = e.target.value
+                      this.setState({
+                        reviews: reviewsCopy
+                      })
+                    }} />
+                </Col>
+                <Col md="5">
+                  <Input value={review.rating}
+                    type="range"
+                    onChange={e => {
+                      let reviewsCopy = JSON.parse(JSON.stringify(this.state.reviews))
+                      reviewsCopy[index].rating = e.target.value
+                      this.setState({
+                        reviews: reviewsCopy
+                      })
+                    }} />
+                </Col>
+                <Col>
+                  <Button
+                    className="btn-round float-right"
+                    type="button"
+                    onClick={() => { this.updateReview(index); this.getReviews(); this.setState({ update_flg: false }) }}
+                  >
+                    Submit
+                        </Button>
+                </Col>
+
+
+              </Row>
+              <label onClick={() => this.setState({ update_flg: true })}
+                style={{ cursor: "pointer", position: "relative", left: "100%" }} >Update this review</label>
+            </Container>
           </div>
         );
 
-      });
-    
+      else
+        return (
+          <div className="section" key={review.rid}>
+            <Container>
+              <label onClick={() => { this.deleteReview(review.rid); this.getReviews() }} style={{
+                cursor: "pointer",
+                width: "50px",
+                height: "50px",
+                borderStyle: "solid",
+                textAlign: "center",
+                fontSize: "30px"
+              }} >X</label>
+              <Row className="justify-content-between">
+                <Col>
+                  <img
+                    alt="..."
+                    className="img-center img-fluid rounded-circle"
+                    style={{ height: "300px", marginTop: "30px" }}
+                    src={`http://${review.image1}`}
+                  />
+                </Col>
+                <Col md="5">
 
-    var wines = reviews.map(review => 
-        <tr>
-          <td>{review.name}</td>
-        </tr>);
+                  <p style={{ fontSize: "large", marginTop: "50px", textAlign: "center" }}>
+                    {review.description}
+                  </p>
+
+                </Col>
+                <Col md="5">
+                  <h1 className="profile-title text-left">{review.name}</h1>
+                  <h5 className="text-on-back" style={{ fontSize: "200px" }}>{review.rating / 10}</h5>
+                </Col>
+              </Row>
+              <label onClick={() => this.setState({ update_flg: true })}
+                style={{ cursor: "pointer", position: "relative", left: "100%" }} >Update this review</label>
+            </Container>
+          </div>
+        );
+
+    });
+
+
+    var wines = reviews.map(review =>
+      <tr>
+        <td>{review.name}</td>
+      </tr>);
 
     return (
       <>
@@ -374,12 +527,12 @@ deleteReview = (rid) => {
             <Container className="align-items-center">
               <Row>
                 <Col lg="6" md="6">
-                  <h1 className="profile-title text-left" style={{fontSize:"150px"}}>{this.state.userinfo.name}</h1>
+                  <h1 className="profile-title text-left" style={{ fontSize: "150px" }}>{this.state.userinfo.name}</h1>
                   <h5 className="text-on-back">01</h5>
-                 
+
                 </Col>
                 <Col className="ml-auto mr-auto" lg="4" md="6">
-                  <Card className="card-coin card-plain" style = {{background:"#344675d9"}}>
+                  <Card className="card-coin card-plain" style={{ background: "#344675d9" }}>
                     <CardHeader>
                       <img
                         alt="..."
@@ -404,7 +557,7 @@ deleteReview = (rid) => {
                             Basic Info
                           </NavLink>
                         </NavItem>
-                       
+
                         <NavItem>
                           <NavLink
                             className={classnames({
@@ -423,7 +576,7 @@ deleteReview = (rid) => {
                       >
                         <TabPane tabId="tab1">
                           <Table className="tablesorter" responsive>
-                           
+
                             <tbody>
                               <tr>
                                 <td>Name</td>
@@ -440,7 +593,7 @@ deleteReview = (rid) => {
                             </tbody>
                           </Table>
                         </TabPane>
-                       
+
                         <TabPane tabId="tab3">
                           <Table className="tablesorter" responsive>
                             <thead className="text-primary">
@@ -449,7 +602,7 @@ deleteReview = (rid) => {
                               </tr>
                             </thead>
                             <tbody>
-                             {wines}
+                              {wines}
                             </tbody>
                           </Table>
                         </TabPane>
@@ -460,6 +613,37 @@ deleteReview = (rid) => {
               </Row>
             </Container>
           </div>
+
+
+          <section className="section">
+            <Container>
+              <Col lg="6" md="6">
+                <h1 className="profile-title text-left">Wine Collection Analysis</h1>
+                <h5 className="text-on-back">02</h5>
+              </Col>
+            </Container>
+          </section>
+          <Row>
+            <div style={{ margin: "auto", textAlign: "center" }}>
+              {winerypieChart}
+              {varietypieChart}
+              {designationpieChart}
+            </div>
+          </Row>
+          <Row>
+          <div style={{ margin: "auto", textAlign: "center", backgroundColor:"honeyDew" }}>
+            {priceLineChart}
+            </div>
+          </Row>
+
+          <section className="section">
+            <Container>
+              <Col lg="6" md="6">
+                <h1 className="profile-title text-left">Wine Reviews</h1>
+                <h5 className="text-on-back">03</h5>
+              </Col>
+            </Container>
+          </section>
           {reviewsList}
           <section className="section">
             <Container>
@@ -468,7 +652,7 @@ deleteReview = (rid) => {
                   <Card className="card-plain">
                     <CardHeader>
                       <h1 className="profile-title text-left">Update your Info</h1>
-                      <h5 className="text-on-back">03</h5>
+                      <h5 className="text-on-back">04</h5>
                     </CardHeader>
                     <CardBody>
                       <Form>
@@ -476,8 +660,8 @@ deleteReview = (rid) => {
                           <Col md="6">
                             <FormGroup>
                               <label>Your Name</label>
-                              <Input  value={this.state.name}
-                                           onChange={e => this.setState({name: e.target.value})} />
+                              <Input value={this.state.name}
+                                onChange={e => this.setState({ name: e.target.value })} />
                             </FormGroup>
                           </Col>
                           <Col md="6">
@@ -486,7 +670,7 @@ deleteReview = (rid) => {
                               <Input
                                 type="password"
                                 value={this.state.password}
-                                           onChange={e => this.setState({password: e.target.value})}
+                                onChange={e => this.setState({ password: e.target.value })}
                               />
                             </FormGroup>
                           </Col>
@@ -496,25 +680,25 @@ deleteReview = (rid) => {
                             <FormGroup>
                               <label>Age</label>
                               <Input value={this.state.age}
-                                           onChange={e => this.setState({age: e.target.value})} />
+                                onChange={e => this.setState({ age: e.target.value })} />
                             </FormGroup>
                           </Col>
                           <Col md="6">
                             <FormGroup>
                               <label>Gender</label>
                               <Input value={this.state.gender}
-                                           onChange={e => this.setState({gender: e.target.value})} />
+                                onChange={e => this.setState({ gender: e.target.value })} />
                             </FormGroup>
                           </Col>
                         </Row>
-                      
+
                         <Button
                           className="btn-round float-right"
                           color="primary"
                           data-placement="right"
                           id="tooltip341148792"
                           type="button"
-                          onClick = {this.UpdateUserInfo}
+                          onClick={this.UpdateUserInfo}
                         >
                           Update
                         </Button>
@@ -529,15 +713,19 @@ deleteReview = (rid) => {
                     </CardBody>
                   </Card>
                 </Col>
-                
+
               </Row>
             </Container>
           </section>
-          
+
         </div>
       </>
     );
   }
 }
+
+
+
+
 
 export default ProfilePage;

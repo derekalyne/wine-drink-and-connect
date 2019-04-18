@@ -10,13 +10,14 @@ import RegisterPage from "views/WinePages/RegisterPage.jsx";
 import ProfilePage from "views/WinePages/ProfilePage.jsx";
 import WineTables from "views/WinePages/WineTables.jsx";
 import WineDetails from "views/WinePages/WineDetails.jsx";
+import BasicMap from "views/WinePages/HeatMap.jsx";
 
 class App extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
         wid:'',
-        username:'Not Logged In',
+        username:'remytherat',
       };   
     }
 
@@ -55,6 +56,10 @@ render(){
                  <Route
                         path="/welcome/wine-detail"
                         render={props => <WineDetails {...props} />}
+                /> 
+                  <Route
+                        path="/welcome/map"
+                        render={props => <BasicMap {...props} />}
                 /> 
                 <Redirect to="/welcome/register-page"/>
                 </Switch>
