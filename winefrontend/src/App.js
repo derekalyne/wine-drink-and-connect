@@ -11,6 +11,8 @@ import ProfilePage from "views/WinePages/ProfilePage.jsx";
 import WineTables from "views/WinePages/WineTables.jsx";
 import WineDetails from "views/WinePages/WineDetails.jsx";
 import BasicMap from "views/WinePages/HeatMap.jsx";
+import GroupSelectPage from "views/WinePages/GroupSelectPage.jsx";
+import GroupMessagesPage from "views/WinePages/GroupMessagesPage.jsx";
 
 class App extends React.Component {
     constructor(props) {
@@ -18,6 +20,7 @@ class App extends React.Component {
       this.state = {
         wid:'',
         username:'remytherat',
+        group:{}
       };   
     }
 
@@ -30,14 +33,22 @@ updateUsername = (UN) =>{
         username:UN,
     })}
 
+updateGroup = (g) => {
+    this.setState({
+        group:g
+    })
+}
+
 render(){
      return(
         <WineContext.Provider value = {{
             wid:this.state.wid,
             username:this.state.username,
             name:this.state.name,
+            group:this.state.group,
             updateWid:this.updateWid,
-            updateUsername:this.updateUsername
+            updateUsername:this.updateUsername,
+            updateGroup:this.updateGroup,
         }}>
             <BrowserRouter>
                 <Switch>
@@ -60,6 +71,14 @@ render(){
                   <Route
                         path="/welcome/map"
                         render={props => <BasicMap {...props} />}
+                /> 
+                 <Route
+                        path="/welcome/group-select"
+                        render={props => <GroupSelectPage {...props} />}
+                /> 
+                <Route
+                        path="/welcome/group-messages"
+                        render={props => <GroupMessagesPage {...props} />}
                 /> 
                 <Redirect to="/welcome/register-page"/>
                 </Switch>

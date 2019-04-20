@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Drinkers,Locations,Reviews,Wines,WineLoc
+from .models import Drinkers,Locations,Reviews,Wines,WineLoc,Group
 
 
 
@@ -38,3 +38,10 @@ class WineLocSerializer(serializers.ModelSerializer):
     class Meta:
         model = WineLoc
         fields = ("wid","name","winery","year","variety","price","designation","locid","region","province","country")
+
+
+class GroupSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Group
+        fields = ("gid","name","mongoId")

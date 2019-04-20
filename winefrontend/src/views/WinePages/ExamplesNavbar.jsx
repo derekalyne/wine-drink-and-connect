@@ -146,6 +146,11 @@ class PagesNavbar extends React.Component {
                 </NavLink>
                 </NavItem>
                 <NavItem className="p-0">
+                <NavLink tag={Link} to="group-select">
+                  Groups
+                </NavLink>
+                </NavItem>
+                <NavItem className="p-0">
                 <NavLink tag={Link} to="tables">
                   Wine Collection
                 </NavLink>

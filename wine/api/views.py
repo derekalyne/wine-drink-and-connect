@@ -1,5 +1,5 @@
-from .serializers import DrinkersSerializer, LocationsSerializer,ReviewsSerializer,WinesSerializer,WineLocSerializer
-from .models import Drinkers,Locations,Reviews,Wines,WineLoc
+from .serializers import DrinkersSerializer, LocationsSerializer,ReviewsSerializer,WinesSerializer,WineLocSerializer,GroupSerializer
+from .models import Drinkers,Locations,Reviews,Wines,WineLoc,Group
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -300,3 +300,56 @@ def wine_list_sql_generator(wid, name, winery, year_gt, year_lt, variety, price_
     print(sql_vars)
 
     return sql_stmt, sql_vars
+
+
+@api_view(['GET'])
+@csrf_exempt
+def groups_by_username(request, username, format=None):
+    """
+    POST: API endpoint that adds a member to a group
+    DELETE: API endpoint to remove user from a group
+    /api/reviews/{wid}
+    """
+    if request.method == "GET":
+        if username is None:
+            return Response(request, status=status.HTTP_400_BAD_REQUEST)
+        data = Group.objects.raw("SELECT g.gid, g.name, g.mongoId FROM groups g, members m  WHERE g.gid=m.gid and username=%s", [username])
+        groupSerializer = GroupSerializer(data, context={'request': request}, many=True)
+        return Response({'data': groupSerializer.data}, status=status.HTTP_200_OK)
+
+
+@api_view(['POST', 'DELETE'])
+@csrf_exempt
+def group_members(request, gid, format=None):
+    """
+    POST: API endpoint that adds a member to a group
+    DELETE: API endpoint to remove user from a group
+    /api/reviews/{wid}
+    """
+    if request.method == "POST":
+        if "username" not in request.data or gid is None:
+            return Response(request.data, status=status.HTTP_400_BAD_REQUEST)
+        user_to_add = request.data["username"]
+        add_member_to_group(username=user_to_add, gid=gid)
+        return Response(request.data, status=status.HTTP_201_CREATED)
+
+    elif request.method == "DELETE":
+        if "username" not in request.data or gid is None:
+            return Response(request.data, status=status.HTTP_400_BAD_REQUEST)
+        user_to_delete = request.data["username"]
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute("DELETE FROM members WHERE username=%s AND gid=%s", [user_to_delete, gid])
+                return Response(request.data, status=status.HTTP_200_OK)
+        except:
+            return Response(request.data, status=status.HTTP_400_BAD_REQUEST)
+
+
+def add_member_to_group(gid, username):
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("INSERT INTO members (username, gid) VALUES (%s, %s)", [username, gid])
+        return True
+    except:
+        return False
+

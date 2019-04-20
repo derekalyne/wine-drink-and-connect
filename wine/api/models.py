@@ -99,3 +99,13 @@ class WineLoc(models.Model):
     class Meta:
         managed = False
         db_table = "wines"
+
+
+class Group(models.Model):
+    gid = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=255)
+    mongoId = models.CharField(max_length=255)
+
+    class Meta:
+        managed = False
+        db_table = "groups"
