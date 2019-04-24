@@ -18,7 +18,7 @@ from django.http import HttpResponse
 from .views import add_member_to_group
 import pprint
 
-db = MongoClient().practice
+db = MongoClient().wine
 
 
 class JSONEncoder(json.JSONEncoder):
@@ -57,7 +57,7 @@ def messages(request, groupId, format=None):
                  }
              }
         ]
-        found = db.test2.aggregate(pipeline)
+        found = db.groups.aggregate(pipeline)
         ret = dumps(found, default=json_util.default)
         return HttpResponse(ret, content_type='application/json', status=status.HTTP_200_OK)
 
@@ -68,7 +68,7 @@ def messages(request, groupId, format=None):
         text = request.data['text']
         objId = ObjectId(groupId)
         new_message = vars(Message(author=author, text=text))
-        update_response = db.test2.update_one({'_id': objId}, {'$push': {'messages': new_message}})
+        update_response = db.groups.update_one({'_id': objId}, {'$push': {'messages': new_message}})
         print(update_response)
         return Response(request.data, status=status.HTTP_201_CREATED)
 
@@ -88,7 +88,7 @@ def createGroup(request, format=None):
         name = request.data['name']
         members = request.data['members']
         new_group = vars(Group(name=name))
-        insert_id = db.test2.insert(new_group)
+        insert_id = db.groups.insert(new_group)
         mongo_id = str(insert_id)
 
         with connection.cursor() as cursor:
