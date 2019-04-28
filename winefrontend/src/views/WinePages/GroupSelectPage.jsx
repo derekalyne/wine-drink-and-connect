@@ -66,6 +66,68 @@ class GroupSelectPage extends React.Component {
   }
 
 
+  createGroup = (name, otherMembers) => {
+    // var url = `http://sp19-cs411-46.cs.illinois.edu:8000/api/group`;
+    var url = `http://127.0.0.1:8000/api/group`;
+    var self = this;
+    if (otherMembers === null) otherMembers = [];
+    otherMembers.push(this.context.username);
+    let data = {
+      "name": name,
+      "members": otherMembers
+    }
+    fetch(url,
+      {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          'X-CSRFToken': csrftoken,
+          'Content-Type': 'application/json'
+        },
+      }).then( (e) => {
+        console.log(e);
+        return e.json()
+      })
+      .catch( (e) => { return console.error("Error:", e) })
+      .then( e => {
+        console.log(e);
+        // self.context.updateGroup(e);
+        // TODO: go to group message page
+      }) 
+  }
+
+
+  addMember = (gid, member) => {
+    // var url = `http://sp19-cs411-46.cs.illinois.edu:8000/api/group/{gid}/members`;
+    var url = `http://127.0.0.1:8000/api/group/` + gid + `/members`;
+    var formData  = new FormData();
+    let self = this;
+    formData.append("username", this.context.username);
+    fetch(url,
+      {
+          method: "POST",
+          body: formData,
+          headers: {
+            'X-CSRFToken': csrftoken
+          },
+      }).then( (e) => {
+        console.log(e);
+        return e.json()
+      })
+      .catch( (e) => { return console.error("Error:", e) })
+      .then( e => {
+        console.log(e);
+        self.getGroups();
+      }) 
+  }
+
+
+  testFunction = () => {
+    this.createGroup("Test Group", ["ItMe"])
+    // this.addMember(5, ["Test123", "Test234"]);
+  }
+
+
   render() {
 
     var groups = this.state.groups.map(g =>
@@ -92,6 +154,7 @@ class GroupSelectPage extends React.Component {
                 </tr>
                 {groups}
               </table>
+              <Button onClick={this.testFunction}>Test Button</Button>
               </Container>
             </div>
           </div>

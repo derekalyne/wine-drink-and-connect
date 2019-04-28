@@ -313,7 +313,12 @@ def groups_by_username(request, username, format=None):
     if request.method == "GET":
         if username is None:
             return Response(request, status=status.HTTP_400_BAD_REQUEST)
-        data = Group.objects.raw("SELECT g.gid, g.name, g.mongoId FROM groups g, members m  WHERE g.gid=m.gid and username=%s", [username])
+        sql_query = "SELECT g1.name, m1.gid, group_concat(username) as members " \
+                    "FROM members m1, groups g1 " \
+                    "WHERE m1.gid=g1.gid and m1.gid IN " \
+                    "(SELECT g.gid from groups g, members m where g.gid=m.gid and username=%s) " \
+                    "GROUP BY m1.gid"
+        data = Group.objects.raw(sql_query, [username])
         groupSerializer = GroupSerializer(data, context={'request': request}, many=True)
         return Response({'data': groupSerializer.data}, status=status.HTTP_200_OK)
 
@@ -324,7 +329,7 @@ def group_members(request, gid, format=None):
     """
     POST: API endpoint that adds a member to a group
     DELETE: API endpoint to remove user from a group
-    /api/reviews/{wid}
+    group/<int:gid>/members
     """
     if request.method == "POST":
         if "username" not in request.data or gid is None:
@@ -352,4 +357,20 @@ def add_member_to_group(gid, username):
         return True
     except:
         return False
+
+
+def get_random_members(username, n):
+    rands = list()
+    with connection.cursor() as cursor:
+        cursor.execute("select username from drinkers where username != %s ORDER BY RAND() LIMIT %s", [username, n])
+        col_names = [desc[0] for desc in cursor.description]
+        while True:
+            row = cursor.fetchone()
+            if row is None:
+                break
+            else:
+                rands.append(row[0])
+                print(row)
+    return rands
+
 

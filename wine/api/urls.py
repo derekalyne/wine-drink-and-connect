@@ -13,6 +13,7 @@ urlpatterns = [
     path('reviews/username/<str:username>', csrf_exempt(views.review_from_user)),
     path('wines/', csrf_exempt(views.wine_list)),
     path('group', csrf_exempt(mongo_views.createGroup)),
+    path('group/random', csrf_exempt(mongo_views.createRandomGroup)),
     path('group/<int:gid>/members', csrf_exempt(views.group_members)),
     path('group/<str:username>', csrf_exempt(views.groups_by_username)),
     path('message/<str:groupId>', csrf_exempt(mongo_views.messages)),

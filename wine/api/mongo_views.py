@@ -15,7 +15,7 @@ import json
 from bson import json_util
 from bson.json_util import dumps
 from django.http import HttpResponse
-from .views import add_member_to_group
+from .views import add_member_to_group, get_random_members
 import pprint
 
 db = MongoClient().wine
@@ -87,6 +87,41 @@ def createGroup(request, format=None):
             return Response(request.data, status=status.HTTP_400_BAD_REQUEST)
         name = request.data['name']
         members = request.data['members']
+        new_group = vars(Group(name=name))
+        insert_id = db.groups.insert(new_group)
+        mongo_id = str(insert_id)
+
+        with connection.cursor() as cursor:
+            cursor.execute("INSERT INTO groups (name, mongoId) VALUES (%s, %s)", [name, mongo_id])
+            gid = cursor.lastrowid
+
+        for member in members:
+            add_member_to_group(gid, member)
+
+        retVal = {
+            "gid": gid,
+            "name": name,
+            "mongoId": mongo_id,
+        }
+        return Response(retVal, status=status.HTTP_201_CREATED)
+
+
+@api_view(['POST'])
+@csrf_exempt
+def createRandomGroup(request, format=None):
+    """
+        POST create a new group of n number of random people
+        /api/group/random
+        """
+    if request.method == 'POST':
+        if "name" not in request.data or "number" not in request.data or "username" not in request.data:
+            return Response(request.data, status=status.HTTP_400_BAD_REQUEST)
+        name = request.data['name']
+        n = request.data['number']
+        username = request.data['username']
+        members = get_random_members(username, n)
+        members.append(username)
+
         new_group = vars(Group(name=name))
         insert_id = db.groups.insert(new_group)
         mongo_id = str(insert_id)
