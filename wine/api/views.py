@@ -256,7 +256,7 @@ def wine_list(request, format=None):
                 {'image2': request.META['HTTP_HOST'] + '/static' + '/wid' + str(dictionary['wid']) + '/' + '1.jpg'})
         else:
             dictionary.update(
-                {'image1': request.META['HTTP_HOST'] + '/static' + '/wid' + 1 + '/' + '0.jpg'})
+                {'image1': request.META['HTTP_HOST'] + '/static' + '/wid1' + '/' + '0.jpg'})
             
 
     return Response({'data': serializer.data, 'count': paginator.count, 'numPages': paginator.num_pages, 'nextPage':next_page, 'previousPage':previous_page})
