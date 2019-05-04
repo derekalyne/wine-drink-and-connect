@@ -2,15 +2,15 @@ import React from "react";
 import classnames from "classnames";
 import WineContext from "../Context/wine-context"
 import { Link } from "react-router-dom";
-
+import  winepic  from 'assets/img/wine4.jpg';
 
 // reactstrap components
 import {
-  Button,
-  Container,
-  NavLink,
-  Row,
-  Col
+    Button,
+    Container,
+    NavLink,
+    Row,
+    Col, FormGroup, Label, Input, Form
 } from "reactstrap";
 
 // core components
@@ -47,8 +47,8 @@ class GroupSelectPage extends React.Component {
 
 
   getGroups = () =>{
-    // var url = `http://sp19-cs411-46.cs.illinois.edu:8000/api/group/` + this.context.username;
-    var url = `http://127.0.0.1:8000/api/group/` + this.context.username;
+    var url = `http://sp19-cs411-46.cs.illinois.edu:8000/api/group/` + this.context.username;
+    // var url = `http://127.0.0.1:8000/api/group/` + this.context.username;
     fetch(url,
         {
             method: "GET",
@@ -66,15 +66,16 @@ class GroupSelectPage extends React.Component {
   }
 
 
-  createGroup = (name, otherMembers) => {
-    // var url = `http://sp19-cs411-46.cs.illinois.edu:8000/api/group`;
-    var url = `http://127.0.0.1:8000/api/group`;
+  createGroup = (name, number) => {
+    var url = `http://sp19-cs411-46.cs.illinois.edu:8000/api/group/random`;
+    // var url = `http://127.0.0.1:8000/api/group`;
     var self = this;
-    if (otherMembers === null) otherMembers = [];
-    otherMembers.push(this.context.username);
+    if (number === null) number = [];
+    var username = this.context.username;
     let data = {
       "name": name,
-      "members": otherMembers
+      "number": number,
+        "username":username,
     }
     fetch(url,
       {
@@ -92,7 +93,7 @@ class GroupSelectPage extends React.Component {
       .then( e => {
         console.log(e);
         // self.context.updateGroup(e);
-        // TODO: go to group message page
+        //
       }) 
   }
 
@@ -123,19 +124,20 @@ class GroupSelectPage extends React.Component {
 
 
   testFunction = () => {
-    this.createGroup("Test Group", ["ItMe"])
-    // this.addMember(5, ["Test123", "Test234"]);
+    this.createGroup("new_group", 4);
+
   }
 
 
   render() {
 
     var groups = this.state.groups.map(g =>
-      <tr key = {g.gid} align='center'>
+      <tr align='center'>
+          <td> < img src={winepic} width = "25%" /></td>
           <NavLink tag={Link} to="group-messages">
-          <td width="50%" onClick={()=>this.context.updateGroup(g)}>{g.name}</td>
+          <td>{g.name}</td>
           </NavLink>
-          <td width="50%">{g.mongoId}</td>
+          <td>{g.members}</td>
       </tr>
     );
 
@@ -147,15 +149,36 @@ class GroupSelectPage extends React.Component {
             <div className="page-header-image" />
             <div className="content">
               <Container>
-              <table   align='center' >
+              <table align='center' >
                 <tr align='center'>
-                    <th width="50%"> Name</th>
-                    <th width="50%"> MongoId</th>
+                    <th width="25%">Image</th>
+                    <th>Name</th>
+                    <th>Members</th>
                 </tr>
                 {groups}
               </table>
-              <Button onClick={this.testFunction}>Test Button</Button>
               </Container>
+                <Container>
+                    <FormGroup controlId='wineName'>
+                        <Label>Group name:</Label>
+                        <Input defaultValue=""
+                               placeholder="group"
+                               type="text"
+                               name='name'
+                               value={this.state.name}
+                               onChange={e => this.setState({name1: e.target.name})} />
+                    </FormGroup>
+                    <Button onClick={this.testFunction}>create group</Button>
+                    <FormGroup controlId='wineMembers'>
+                        <Label>amount of members: </Label>
+                        <Input defaultValue=""
+                               placeholder="member1, member2, ..."
+                               type="text"
+                               name='members'
+                               value={this.state.members}
+                               onChange={e => this.setState({members1: e.target.members})} />
+                    </FormGroup>
+                </Container>
             </div>
           </div>
         </div>

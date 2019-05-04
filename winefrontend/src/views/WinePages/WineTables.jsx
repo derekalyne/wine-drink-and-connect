@@ -169,12 +169,11 @@ class WineTables extends React.Component {
                 <img height='125px' src={`http://${o.image1}`}/>
             </tr>
         );
-
         return (
             <>
                 <ExamplesNavbar />
                 {/* search bar */}
-                <div style={{margin: 20}} className='section section-basic' >
+                <div style={{margin: 20}} className='section section-basic'>
 
                     <div className='container-fluid' >
                         <Form className='form'>
